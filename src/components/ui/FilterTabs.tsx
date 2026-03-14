@@ -19,8 +19,8 @@ export function FilterTabs({ tabs, activeTab, onTabChange }: FilterTabsProps) {
               className={cn(
                 "px-4 py-2 text-sm font-semibold rounded-full transition-all duration-200 whitespace-nowrap active:scale-95",
                 isActive 
-                  ? "bg-indigo-600 text-white shadow-md shadow-indigo-600/20" 
-                  : "bg-white text-gray-600 border border-gray-200 hover:bg-gray-50 hover:text-gray-900"
+                  ? "bg-gradient-to-r from-violet-600 to-fuchsia-500 text-white shadow-[0_12px_40px_rgba(0,0,0,0.08)] shadow-violet-600/20" 
+                  : "bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 hover:text-slate-900"
               )}
             >
               {tab}

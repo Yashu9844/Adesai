@@ -30,14 +30,14 @@ export function PhotoUpload({ label, onPhotoSelect }: PhotoUploadProps) {
 
   return (
     <div className="w-full flex flex-col gap-1.5">
-      <label className="text-sm font-semibold text-gray-700 ml-1">{label}</label>
+      <label className="text-sm font-semibold text-slate-700 ml-1">{label}</label>
       
       <div 
         onClick={() => inputRef.current?.click()}
-        className={`relative w-full h-32 rounded-xl border-2 border-dashed transition-all duration-200 cursor-pointer overflow-hidden group flex flex-col items-center justify-center
+        className={`relative w-full h-32 rounded-[1.25rem] border-2 border-dashed transition-all duration-200 cursor-pointer overflow-hidden group flex flex-col items-center justify-center
           ${preview 
-            ? 'border-indigo-200 bg-indigo-50/30' 
-            : 'border-gray-200 bg-gray-50 hover:bg-gray-100 hover:border-indigo-300'
+            ? 'border-violet-200 bg-violet-50/30' 
+            : 'border-slate-200 bg-slate-50 hover:bg-slate-100 hover:border-violet-300'
           }`}
       >
         <input
@@ -65,8 +65,8 @@ export function PhotoUpload({ label, onPhotoSelect }: PhotoUploadProps) {
             </button>
            </>
         ) : (
-          <div className="flex flex-col items-center gap-2 text-gray-500 group-hover:text-indigo-600 transition-colors">
-            <div className="p-3 bg-white rounded-full shadow-sm group-hover:shadow-md transition-all">
+          <div className="flex flex-col items-center gap-2 text-slate-500 group-hover:text-violet-600 transition-colors">
+            <div className="p-3 bg-white rounded-full shadow-[0_8px_30px_rgba(0,0,0,0.04)] group-hover:shadow-[0_12px_40px_rgba(0,0,0,0.08)] transition-all">
               <ImagePlus className="w-6 h-6" />
             </div>
             <span className="text-sm font-medium">Tap to take photo</span>

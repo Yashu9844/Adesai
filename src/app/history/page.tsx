@@ -76,13 +76,13 @@ export default function HistoryPage() {
   });
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
+    <div className="min-h-screen bg-transparent flex flex-col">
       <Header title="Rental History" subtitle="View past rental transactions" showNotification={false} />
 
       <main className="flex-1 overflow-y-auto pb-28 pt-4">
         
         {/* Sticky Filters & Search */}
-        <div className="sticky top-0 z-30 bg-gray-50/95 backdrop-blur-sm px-4 py-2 mb-2 flex flex-col gap-3">
+        <div className="sticky top-0 z-30 bg-white/40 backdrop-blur-2xl border-b border-white/60 px-4 py-2 mb-2 flex flex-col gap-3">
           <SearchBar 
             placeholder="Search by name, mobile, or tool..." 
             value={searchQuery}
@@ -98,8 +98,8 @@ export default function HistoryPage() {
         {/* Total Summary Mini-Banner */}
         <div className="px-4 mb-5 pt-2">
           <div className="flex items-center justify-between text-sm px-1">
-            <span className="text-gray-500 font-medium">Showing <strong className="text-gray-900">{filteredHistory.length}</strong> transactions</span>
-            <span className="text-gray-500 font-medium">Earned: <strong className="text-indigo-600">₹7,100</strong></span>
+            <span className="text-slate-500 font-medium">Showing <strong className="text-slate-900">{filteredHistory.length}</strong> transactions</span>
+            <span className="text-slate-500 font-medium">Earned: <strong className="text-violet-600">₹7,100</strong></span>
           </div>
         </div>
 
@@ -111,11 +111,11 @@ export default function HistoryPage() {
             ))
           ) : (
             <div className="col-span-full py-20 flex flex-col items-center justify-center text-center">
-              <div className="w-16 h-16 bg-white shadow-sm border border-gray-100 rounded-full flex items-center justify-center mb-4">
-                <Search className="w-8 h-8 text-gray-300" />
+              <div className="w-16 h-16 bg-white shadow-[0_8px_30px_rgba(0,0,0,0.04)] border border-slate-200/50 rounded-full flex items-center justify-center mb-4">
+                <Search className="w-8 h-8 text-slate-300" />
               </div>
-              <h3 className="text-gray-900 font-bold text-lg mb-1">No records found</h3>
-              <p className="text-gray-500 text-sm max-w-[220px]">
+              <h3 className="text-slate-900 font-bold text-lg mb-1">No records found</h3>
+              <p className="text-slate-500 text-sm max-w-[220px]">
                 {searchQuery 
                   ? `We couldn't find any history matching "${searchQuery}"` 
                   : `No completed rentals for "${activeFilter}"`}

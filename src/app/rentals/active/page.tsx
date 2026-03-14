@@ -57,13 +57,13 @@ export default function ActiveRentalsPage() {
   });
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
+    <div className="min-h-screen bg-transparent flex flex-col">
       <Header title="Active Rentals" subtitle="Tools currently rented by customers" showNotification={false} />
 
       <main className="flex-1 overflow-y-auto pb-28 pt-4">
         
         {/* Sticky Utility Bar with Search */}
-        <div className="sticky top-0 z-30 bg-gray-50/95 backdrop-blur-sm px-4 py-2 mb-4">
+        <div className="sticky top-0 z-30 bg-white/40 backdrop-blur-2xl border-b border-white/60 px-4 py-2 mb-4">
           <SearchBar 
             placeholder="Search by name, mobile, or tool..." 
             value={searchQuery}
@@ -73,9 +73,9 @@ export default function ActiveRentalsPage() {
 
         {/* Info Banner */}
         <div className="px-4 mb-5">
-          <div className="bg-amber-50 border border-amber-100 p-3 rounded-xl flex items-start gap-3">
-            <Clock className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />
-            <p className="text-sm text-amber-800 font-medium">
+          <div className="bg-rose-50 border border-rose-100 p-3 rounded-[1.25rem] flex items-start gap-3">
+            <Clock className="w-5 h-5 text-rose-500 shrink-0 mt-0.5" />
+            <p className="text-sm text-rose-800 font-medium">
               You have <span className="font-bold">{ACTIVE_RENTALS.length} active rentals</span> at the moment. Total estimated value: ₹2,250.
             </p>
           </div>
@@ -94,11 +94,11 @@ export default function ActiveRentalsPage() {
             ))
           ) : (
             <div className="col-span-full py-16 flex flex-col items-center justify-center text-center">
-              <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
-                <Clock className="w-8 h-8 text-gray-400" />
+              <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mb-4">
+                <Clock className="w-8 h-8 text-slate-400" />
               </div>
-              <h3 className="text-gray-900 font-bold text-lg mb-1">No active rentals</h3>
-              <p className="text-gray-500 text-sm max-w-[200px]">
+              <h3 className="text-slate-900 font-bold text-lg mb-1">No active rentals</h3>
+              <p className="text-slate-500 text-sm max-w-[200px]">
                 {searchQuery ? `We couldn't find any rentals matching "${searchQuery}"` : "All rented tools have been returned."}
               </p>
             </div>

@@ -59,18 +59,18 @@ export default function InventoryPage() {
   );
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
+    <div className="min-h-screen bg-transparent flex flex-col">
       <Header title="Inventory" subtitle="Manage and track all available tools" />
 
       {/* Main Content Area */}
       <main className="flex-1 overflow-y-auto pb-28 pt-4">
         
         {/* Sticky Utility Bar with Search and Add Action */}
-        <div className="sticky top-0 z-30 bg-gray-50/95 backdrop-blur-sm px-4 py-2 mb-4">
+        <div className="sticky top-0 z-30 bg-white/40 backdrop-blur-2xl border-b border-white/60 px-4 py-2 mb-4">
           <div className="flex flex-col gap-3">
             <div className="flex justify-between items-center px-1">
-              <h2 className="text-gray-900 font-bold text-lg">All Tools</h2>
-              <button className="bg-indigo-600 hover:bg-indigo-700 active:scale-95 transition-all text-white text-sm font-semibold px-4 py-2 rounded-xl flex items-center justify-center gap-1.5 shadow-[0_2px_10px_-2px_rgba(79,70,229,0.3)]">
+              <h2 className="text-slate-900 font-bold text-lg">All Tools</h2>
+              <button className="bg-gradient-to-r from-violet-600 to-fuchsia-500 hover:from-violet-700 hover:to-fuchsia-600 active:scale-95 transition-all text-white text-sm font-semibold px-4 py-2 rounded-[1.25rem] flex items-center justify-center gap-1.5 shadow-[0_2px_10px_-2px_rgba(79,70,229,0.3)]">
                 <Plus className="w-4 h-4" /> Add Tool
               </button>
             </div>
@@ -90,11 +90,11 @@ export default function InventoryPage() {
             ))
           ) : (
             <div className="col-span-full py-16 flex flex-col items-center justify-center text-center">
-              <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
-                <Search className="w-8 h-8 text-gray-400" />
+              <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mb-4">
+                <Search className="w-8 h-8 text-slate-400" />
               </div>
-              <h3 className="text-gray-900 font-bold text-lg mb-1">No tools found</h3>
-              <p className="text-gray-500 text-sm max-w-[200px]">
+              <h3 className="text-slate-900 font-bold text-lg mb-1">No tools found</h3>
+              <p className="text-slate-500 text-sm max-w-[200px]">
                 We couldn't find any tools matching "{searchQuery}"
               </p>
             </div>

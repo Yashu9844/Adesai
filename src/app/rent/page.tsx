@@ -32,26 +32,26 @@ export default function CreateRentalPage() {
   const today = new Date().toISOString().split('T')[0];
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
+    <div className="min-h-screen bg-transparent flex flex-col">
       <Header title="Give Tool" subtitle="Create a new rental entry" showNotification={false} />
 
       <main className="flex-1 overflow-y-auto px-4 py-6 pb-32">
         <form className="space-y-6 max-w-md mx-auto" onSubmit={(e) => e.preventDefault()}>
           
           {/* Section 1: Tool Selection */}
-          <section className="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 flex flex-col gap-4">
+          <section className="bg-white p-5 rounded-[1.5rem] shadow-[0_8px_30px_rgba(0,0,0,0.04)] border border-slate-200/50 flex flex-col gap-4">
             <div className="flex items-center gap-2 mb-1">
-              <div className="p-1.5 bg-indigo-50 rounded-lg text-indigo-600">
+              <div className="p-1.5 bg-violet-50 rounded-[1rem] text-violet-600">
                 <Package className="w-4 h-4" />
               </div>
-              <h2 className="text-sm font-bold text-gray-900 uppercase tracking-wide">Select Tool</h2>
+              <h2 className="text-sm font-bold text-slate-900 uppercase tracking-wide">Select Tool</h2>
             </div>
             
             <div className="w-full flex flex-col gap-1.5">
-              <label className="text-sm font-semibold text-gray-700 ml-1">Tool Name</label>
+              <label className="text-sm font-semibold text-slate-700 ml-1">Tool Name</label>
               <div className="relative">
                 <select 
-                  className="flex w-full appearance-none rounded-xl border border-gray-200 bg-white px-4 py-3.5 text-sm transition-all shadow-[0_2px_8px_-2px_rgba(0,0,0,0.04)] focus-visible:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
+                  className="flex w-full appearance-none rounded-[1.25rem] border border-slate-200 bg-white px-4 py-3.5 text-sm transition-all shadow-[0_2px_8px_-2px_rgba(0,0,0,0.04)] focus-visible:outline-none focus:ring-2 focus:ring-violet-600 focus:border-transparent"
                   value={selectedTool}
                   onChange={(e) => setSelectedTool(e.target.value)}
                   required
@@ -61,7 +61,7 @@ export default function CreateRentalPage() {
                     <option key={tool.id} value={tool.id}>{tool.name} - ₹{tool.price}/day</option>
                   ))}
                 </select>
-                <div className="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none text-gray-400">
+                <div className="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none text-slate-400">
                   <ChevronDown className="w-5 h-5" />
                 </div>
               </div>
@@ -80,12 +80,12 @@ export default function CreateRentalPage() {
           </section>
 
           {/* Section 2: Customer Information */}
-          <section className="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 flex flex-col gap-5">
+          <section className="bg-white p-5 rounded-[1.5rem] shadow-[0_8px_30px_rgba(0,0,0,0.04)] border border-slate-200/50 flex flex-col gap-5">
             <div className="flex items-center gap-2 mb-1">
-              <div className="p-1.5 bg-amber-50 rounded-lg text-amber-500">
+              <div className="p-1.5 bg-rose-50 rounded-[1rem] text-rose-500">
                 <User className="w-4 h-4" />
               </div>
-              <h2 className="text-sm font-bold text-gray-900 uppercase tracking-wide">Customer Details</h2>
+              <h2 className="text-sm font-bold text-slate-900 uppercase tracking-wide">Customer Details</h2>
             </div>
 
             <PhotoUpload label="Customer Photo" />
@@ -114,12 +114,12 @@ export default function CreateRentalPage() {
           </section>
 
           {/* Section 3: Rental Terms */}
-          <section className="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 flex flex-col gap-5">
+          <section className="bg-white p-5 rounded-[1.5rem] shadow-[0_8px_30px_rgba(0,0,0,0.04)] border border-slate-200/50 flex flex-col gap-5">
             <div className="flex items-center gap-2 mb-1">
-              <div className="p-1.5 bg-emerald-50 rounded-lg text-emerald-500">
+              <div className="p-1.5 bg-teal-50 rounded-[1rem] text-teal-500">
                 <Calendar className="w-4 h-4" />
               </div>
-              <h2 className="text-sm font-bold text-gray-900 uppercase tracking-wide">Rental Terms</h2>
+              <h2 className="text-sm font-bold text-slate-900 uppercase tracking-wide">Rental Terms</h2>
             </div>
 
             <FormInput 
@@ -151,17 +151,17 @@ export default function CreateRentalPage() {
       </main>
 
       {/* Fixed Bottom Action Bar */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 pb-safe shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-50">
+      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 p-4 pb-safe shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-50">
         <div className="max-w-md mx-auto flex gap-3">
           <Link 
             href="/dashboard"
-            className="px-5 py-3.5 bg-gray-50 text-gray-700 font-semibold rounded-xl text-center hover:bg-gray-100 transition-colors active:scale-95"
+            className="px-5 py-3.5 bg-slate-50 text-slate-700 font-semibold rounded-[1.25rem] text-center hover:bg-slate-100 transition-colors active:scale-95"
           >
             Cancel
           </Link>
           <button 
             type="submit"
-            className="flex-1 px-5 py-3.5 bg-indigo-600 text-white font-semibold rounded-xl text-center shadow-lg shadow-indigo-600/25 hover:bg-indigo-700 transition-all active:scale-[0.98]"
+            className="flex-1 px-5 py-3.5 bg-gradient-to-r from-violet-600 to-fuchsia-500 text-white font-semibold rounded-[1.25rem] text-center shadow-lg shadow-violet-600/25 hover:from-violet-700 hover:to-fuchsia-600 transition-all active:scale-[0.98]"
           >
             Create Rental
           </button>
