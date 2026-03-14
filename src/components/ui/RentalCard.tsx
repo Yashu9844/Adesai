@@ -1,0 +1,112 @@
+import { Calendar, Clock, Package, Phone, User, CheckCircle2 } from "lucide-react";
+import Image from "next/image";
+
+interface RentalCardProps {
+  id: string;
+  customerName: string;
+  mobileNumber: string;
+  village: string;
+  customerPhotoUrl?: string;
+  toolName: string;
+  quantity: number;
+  startDate: string;
+  daysRunning: number;
+  estimatedCost: number;
+  onReturn?: (id: string) => void;
+  onViewDetails?: (id: string) => void;
+}
+
+export function RentalCard({
+  id,
+  customerName,
+  mobileNumber,
+  village,
+  customerPhotoUrl,
+  toolName,
+  quantity,
+  startDate,
+  daysRunning,
+  estimatedCost,
+  onReturn,
+  onViewDetails,
+}: RentalCardProps) {
+  return (
+    <div className="bg-white rounded-2xl p-5 shadow-[0_2px_12px_-4px_rgba(0,0,0,0.08)] border border-gray-100 flex flex-col gap-4 transition-all duration-300 hover:border-indigo-100">
+      
+      {/* Top Header: Customer Info */}
+      <div className="flex items-start gap-4 pb-4 border-b border-gray-50">
+        <div className="relative w-12 h-12 rounded-full overflow-hidden bg-gray-100 shrink-0 border border-gray-200">
+          {customerPhotoUrl ? (
+            <Image src={customerPhotoUrl} alt={customerName} fill className="object-cover" />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-indigo-100 to-indigo-50">
+              <User className="w-6 h-6 text-indigo-400" />
+            </div>
+          )}
+        </div>
+        
+        <div className="flex flex-col flex-1 min-w-0">
+          <h3 className="text-base font-bold text-gray-900 truncate">{customerName}</h3>
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-0.5">
+            <span className="flex items-center gap-1 text-xs text-gray-500 font-medium whitespace-nowrap">
+              <Phone className="w-3.5 h-3.5" />
+              {mobileNumber}
+            </span>
+            <span className="flex items-center gap-1 text-xs text-gray-500 font-medium whitespace-nowrap">
+              <span className="w-1 h-1 bg-gray-300 rounded-full" />
+              {village}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* Middle Content: Tool & Rental Stats */}
+      <div className="flex flex-col gap-3">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2 text-sm font-semibold text-gray-900">
+            <Package className="w-4 h-4 text-indigo-500" />
+            {quantity}x {toolName}
+          </div>
+          <div className="text-sm font-bold text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-lg">
+            ₹{estimatedCost}
+          </div>
+        </div>
+
+        <div className="flex items-center justify-between mt-1 bg-gray-50 rounded-xl p-3">
+          <div className="flex flex-col gap-1">
+            <span className="flex items-center gap-1.5 text-xs font-medium text-gray-500">
+              <Calendar className="w-3.5 h-3.5" /> Started
+            </span>
+            <span className="text-sm font-semibold text-gray-900 ml-5">{startDate}</span>
+          </div>
+          
+          <div className="h-8 w-px bg-gray-200" />
+          
+          <div className="flex flex-col gap-1 items-end">
+            <span className="flex items-center gap-1.5 text-xs font-medium text-amber-600">
+              <Clock className="w-3.5 h-3.5" /> Running
+            </span>
+            <span className="text-sm font-bold text-gray-900">{daysRunning} {daysRunning === 1 ? 'day' : 'days'}</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Action Buttons */}
+      <div className="flex items-center gap-3 mt-1 pt-1">
+        <button 
+          onClick={() => onViewDetails?.(id)}
+          className="flex-1 py-2.5 text-sm font-semibold text-gray-700 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors active:scale-[0.98]"
+        >
+          View Details
+        </button>
+        <button 
+          onClick={() => onReturn?.(id)}
+          className="flex items-center justify-center gap-1.5 flex-[1.5] py-2.5 text-sm font-semibold text-white bg-indigo-600 rounded-xl shadow-[0_2px_10px_-2px_rgba(79,70,229,0.3)] hover:bg-indigo-700 transition-all active:scale-[0.98]"
+        >
+          <CheckCircle2 className="w-4 h-4" /> Return Tool
+        </button>
+      </div>
+
+    </div>
+  );
+}
