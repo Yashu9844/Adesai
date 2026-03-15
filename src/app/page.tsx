@@ -44,10 +44,10 @@ export default function SplashScreen() {
 
       {/* Brand Name */}
       <h1 className="text-2xl font-extrabold text-slate-800 tracking-tight mb-2 opacity-90">
-        Tool Rental Pro
+        Sri Sai baba Tool Rental
       </h1>
       <p className="text-xs font-bold uppercase tracking-[0.2em] text-violet-500 mb-12 opacity-80">
-        Workspace Manager
+        Karimnagar
       </p>
 
       {/* Progress Counter */}

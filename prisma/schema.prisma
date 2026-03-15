@@ -1,0 +1,94 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Tool {
+  id                String       @id @default(uuid())
+  name              String
+  totalQuantity     Int
+  availableQuantity Int
+  dailyPrice        Float
+  imageUrl          String?
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
+  rentalItems       RentalItem[]
+}
+
+model Customer {
+  id        String   @id @default(uuid())
+  name      String
+  mobile    String   @unique
+  village   String
+  photoUrl  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  rentals   Rental[]
+}
+
+model Rental {
+  id            String       @id @default(uuid())
+  customer      Customer     @relation(fields: [customerId], references: [id])
+  customerId    String
+  startDate     DateTime
+  expectedDays  Int
+  status        RentalStatus @default(ACTIVE)
+  advanceAmount Float
+  totalAmount   Float?
+  returnedAt    DateTime?
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+  rentalItems   RentalItem[]
+  payments      Payment[]
+}
+
+model RentalItem {
+  id                 String   @id @default(uuid())
+  rental             Rental   @relation(fields: [rentalId], references: [id])
+  rentalId           String
+  tool               Tool     @relation(fields: [toolId], references: [id])
+  toolId             String
+  quantity           Int
+  returnedQuantity   Int      @default(0)
+  dailyPriceSnapshot Float
+}
+
+model Payment {
+  id            String        @id @default(uuid())
+  rental        Rental        @relation(fields: [rentalId], references: [id])
+  rentalId      String
+  amount        Float
+  type          PaymentType
+  paymentMethod PaymentMethod @default(CASH)
+  createdAt     DateTime      @default(now())
+}
+
+model ActivityLog {
+  id          String   @id @default(uuid())
+  action      String
+  description String
+  userId      String?
+  createdAt   DateTime @default(now())
+}
+
+enum RentalStatus {
+  ACTIVE
+  RETURNED
+  OVERDUE
+}
+
+enum PaymentType {
+  ADVANCE
+  FINAL_SETTLEMENT
+  LATE_FEE
+}
+
+enum PaymentMethod {
+  CASH
+  UPI
+  CARD
+}
