@@ -1,60 +1,33 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Header } from "@/components/ui/Header";
 import { BottomNav } from "@/components/ui/BottomNav";
 import { SearchBar } from "@/components/ui/SearchBar";
 import { ToolCard } from "@/components/ui/ToolCard";
-import { Plus } from "lucide-react";
-
-// Placeholder Mock Data
-const INVENTORY_DATA = [
-  {
-    id: "1",
-    name: "Jali (Iron Mesh)",
-    totalQuantity: 50,
-    availableQuantity: 12,
-    rentedQuantity: 38,
-    dailyPrice: 20,
-  },
-  {
-    id: "2",
-    name: "Support Stand",
-    totalQuantity: 120,
-    availableQuantity: 45,
-    rentedQuantity: 75,
-    dailyPrice: 15,
-  },
-  {
-    id: "3",
-    name: "Dimsa (Compactor)",
-    totalQuantity: 5,
-    availableQuantity: 0,
-    rentedQuantity: 5,
-    dailyPrice: 150,
-  },
-  {
-    id: "4",
-    name: "Concrete Mixer",
-    totalQuantity: 2,
-    availableQuantity: 1,
-    rentedQuantity: 1,
-    dailyPrice: 500,
-  },
-  {
-    id: "5",
-    name: "Scaffolding Pipe",
-    totalQuantity: 200,
-    availableQuantity: 180,
-    rentedQuantity: 20,
-    dailyPrice: 10,
-  },
-];
+import { Plus, Search, Loader2 } from "lucide-react";
+import { getToolsAction } from "@/actions/tool.actions";
 
 export default function InventoryPage() {
   const [searchQuery, setSearchQuery] = useState("");
+  const [tools, setTools] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const filteredTools = INVENTORY_DATA.filter((tool) =>
+  useEffect(() => {
+    async function fetchTools() {
+      const res = await getToolsAction();
+      if (res.success && res.data) {
+        setTools(res.data.map((t: any) => ({
+          ...t,
+          rentedQuantity: t.totalQuantity - t.availableQuantity,
+        })));
+      }
+      setLoading(false);
+    }
+    fetchTools();
+  }, []);
+
+  const filteredTools = tools.filter((tool) =>
     tool.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
@@ -84,7 +57,12 @@ export default function InventoryPage() {
 
         {/* Inventory Grid */}
         <div className="px-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-          {filteredTools.length > 0 ? (
+          {loading ? (
+            <div className="col-span-full py-16 flex flex-col items-center justify-center text-center">
+               <Loader2 className="w-8 h-8 text-violet-600 animate-spin mb-4" />
+               <h3 className="text-slate-900 font-bold text-lg">Loading Inventory...</h3>
+            </div>
+          ) : filteredTools.length > 0 ? (
             filteredTools.map((tool) => (
               <ToolCard key={tool.id} {...tool} />
             ))

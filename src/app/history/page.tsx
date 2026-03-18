@@ -1,79 +1,64 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Header } from "@/components/ui/Header";
 import { BottomNav } from "@/components/ui/BottomNav";
 import { SearchBar } from "@/components/ui/SearchBar";
 import { FilterTabs } from "@/components/ui/FilterTabs";
 import { HistoryCard } from "@/components/ui/HistoryCard";
-import { Search, History as HistoryIcon } from "lucide-react";
-
-// Mock Completed Rentals Data
-const HISTORY_DATA = [
-  {
-    id: "h1",
-    customerName: "Ramesh Kumar",
-    mobileNumber: "9876543210",
-    toolName: "Jali (Iron Mesh)",
-    quantity: 10,
-    startDate: "01 Oct 2026",
-    endDate: "05 Oct 2026",
-    totalDays: 4,
-    totalAmountPaid: 800, // 4 days * 10 qty * 20 price
-  },
-  {
-    id: "h2",
-    customerName: "Sanjay Verma",
-    mobileNumber: "9911223344",
-    toolName: "Concrete Mixer",
-    quantity: 1,
-    startDate: "10 Oct 2026",
-    endDate: "12 Oct 2026",
-    totalDays: 2,
-    totalAmountPaid: 1000, // 2 days * 1 qty * 500 price
-  },
-  {
-    id: "h3",
-    customerName: "Amit Singh",
-    mobileNumber: "9871122334",
-    toolName: "Support Stand",
-    quantity: 20,
-    startDate: "12 Oct 2026",
-    endDate: "12 Oct 2026",
-    totalDays: 1,
-    totalAmountPaid: 300, // 1 day (minimum) * 20 qty * 15 price
-  },
-  {
-    id: "h4",
-    customerName: "Suresh Patel",
-    mobileNumber: "9812345678",
-    toolName: "Scaffolding Pipe",
-    quantity: 50,
-    startDate: "05 Sep 2026",
-    endDate: "15 Sep 2026",
-    totalDays: 10,
-    totalAmountPaid: 5000, 
-  },
-];
+import { Search, Loader2 } from "lucide-react";
+import { getRentalHistoryAction } from "@/actions/rental.actions";
 
 const FILTER_OPTIONS = ["All Time", "Today", "This Week", "This Month"];
 
 export default function HistoryPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeFilter, setActiveFilter] = useState("All Time");
+  
+  const [history, setHistory] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  // Basic client side filtering for the mock data
-  const filteredHistory = HISTORY_DATA.filter((record) => {
+  useEffect(() => {
+    async function fetchHistory() {
+      const res = await getRentalHistoryAction();
+      if (res.success && res.data) {
+        const mappedData = res.data.map((r: any) => {
+          const startDate = new Date(r.startDate);
+          const endDate = new Date(r.returnedAt);
+          const totalDays = Math.max(1, Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)));
+          
+          return {
+            id: r.id,
+            customerName: r.customer.name,
+            mobileNumber: r.customer.mobile,
+            toolName: r.rentalItems.map((i: any) => `${i.tool.name} (x${i.quantity})`).join(', '),
+            quantity: r.rentalItems.reduce((acc: number, item: any) => acc + item.quantity, 0),
+            startDate: startDate.toLocaleDateString(),
+            endDate: endDate.toLocaleDateString(),
+            totalDays,
+            totalAmountPaid: r.totalAmount || 0,
+          };
+        });
+        setHistory(mappedData);
+      }
+      setLoading(false);
+    }
+    fetchHistory();
+  }, []);
+
+  const filteredHistory = history.filter((record) => {
     const q = searchQuery.toLowerCase();
     const matchesSearch = 
       record.customerName.toLowerCase().includes(q) ||
       record.mobileNumber.includes(q) ||
       record.toolName.toLowerCase().includes(q);
       
-    // In a real app we'd filter dates here based on activeFilter
+    // Stub for advanced date filters via activeFilter
     
     return matchesSearch;
   });
+
+  const totalEarned = history.reduce((sum, record) => sum + record.totalAmountPaid, 0);
 
   return (
     <div className="min-h-screen bg-transparent flex flex-col">
@@ -99,13 +84,18 @@ export default function HistoryPage() {
         <div className="px-4 mb-5 pt-2">
           <div className="flex items-center justify-between text-sm px-1">
             <span className="text-slate-500 font-medium">Showing <strong className="text-slate-900">{filteredHistory.length}</strong> transactions</span>
-            <span className="text-slate-500 font-medium">Earned: <strong className="text-violet-600">₹7,100</strong></span>
+            <span className="text-slate-500 font-medium">Earned: <strong className="text-violet-600">₹{totalEarned}</strong></span>
           </div>
         </div>
 
         {/* History List Grid */}
         <div className="px-4 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-          {filteredHistory.length > 0 ? (
+          {loading ? (
+             <div className="col-span-full py-16 flex flex-col items-center justify-center text-center">
+                <Loader2 className="w-8 h-8 text-violet-600 animate-spin mb-4" />
+                <h3 className="text-slate-900 font-bold text-lg">Loading History...</h3>
+             </div>
+          ) : filteredHistory.length > 0 ? (
             filteredHistory.map((record) => (
               <HistoryCard key={record.id} {...record} />
             ))

@@ -1,53 +1,60 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Header } from "@/components/ui/Header";
 import { BottomNav } from "@/components/ui/BottomNav";
 import { SearchBar } from "@/components/ui/SearchBar";
 import { RentalCard } from "@/components/ui/RentalCard";
-import { Clock } from "lucide-react";
-
-// Mock Active Rentals Data
-const ACTIVE_RENTALS = [
-  {
-    id: "r1",
-    customerName: "Ramesh Kumar",
-    mobileNumber: "9876543210",
-    village: "Ramnagar",
-    toolName: "Jali (Iron Mesh)",
-    quantity: 15,
-    startDate: "12 Oct 2026",
-    daysRunning: 3,
-    estimatedCost: 900, // 3 days * 15 qty * 20 price
-  },
-  {
-    id: "r2",
-    customerName: "Suresh Patel",
-    mobileNumber: "9812345678",
-    village: "Shivpur",
-    toolName: "Support Stand",
-    quantity: 40,
-    startDate: "14 Oct 2026",
-    daysRunning: 1,
-    estimatedCost: 600, // 1 day * 40 qty * 15 price
-  },
-  {
-    id: "r3",
-    customerName: "Mohan Lal",
-    mobileNumber: "9988776655",
-    village: "Bhavanipur",
-    toolName: "Dimsa (Compactor)",
-    quantity: 1,
-    startDate: "10 Oct 2026",
-    daysRunning: 5,
-    estimatedCost: 750, // 5 days * 1 qty * 150 price
-  },
-];
+import { Clock, Loader2 } from "lucide-react";
+import { getActiveRentalsAction } from "@/actions/rental.actions";
+import { useRouter } from "next/navigation";
 
 export default function ActiveRentalsPage() {
+  const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
+  const [activeRentals, setActiveRentals] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const filteredRentals = ACTIVE_RENTALS.filter((rental) => {
+  useEffect(() => {
+    async function loadRentals() {
+      const res = await getActiveRentalsAction();
+      if (res.success && res.data) {
+        // Map backend Prisma model to the UI format expected by RentalCard
+        const mappedData = res.data.map((r: any) => {
+          const startDate = new Date(r.startDate);
+          const daysRunning = Math.max(1, Math.ceil((new Date().getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)));
+          
+          let totalQty = 0;
+          let currentCost = 0;
+          let toolNames = [];
+
+          for (const item of r.rentalItems) {
+            totalQty += item.quantity;
+            currentCost += (item.quantity * item.dailyPriceSnapshot * daysRunning);
+            toolNames.push(`${item.tool.name} (x${item.quantity})`);
+          }
+
+          return {
+            id: r.id,
+            customerName: r.customer.name,
+            mobileNumber: r.customer.mobile,
+            village: r.customer.village,
+            toolName: toolNames.join(', '),
+            quantity: totalQty,
+            startDate: startDate.toLocaleDateString(),
+            daysRunning,
+            estimatedCost: currentCost,
+          };
+        });
+
+        setActiveRentals(mappedData);
+      }
+      setLoading(false);
+    }
+    loadRentals();
+  }, []);
+
+  const filteredRentals = activeRentals.filter((rental) => {
     const q = searchQuery.toLowerCase();
     return (
       rental.customerName.toLowerCase().includes(q) ||
@@ -55,6 +62,8 @@ export default function ActiveRentalsPage() {
       rental.toolName.toLowerCase().includes(q)
     );
   });
+
+  const totalEstimatedValue = activeRentals.reduce((sum, r) => sum + r.estimatedCost, 0);
 
   return (
     <div className="min-h-screen bg-transparent flex flex-col">
@@ -73,28 +82,33 @@ export default function ActiveRentalsPage() {
 
         {/* Info Banner */}
         <div className="px-4 mb-5">
-          <div className="bg-rose-50 border border-rose-100 p-3 rounded-[1.25rem] flex items-start gap-3">
+          <div className="bg-rose-50 border border-rose-100 p-3 rounded-[1.25rem] flex items-start gap-3 shadow-sm">
             <Clock className="w-5 h-5 text-rose-500 shrink-0 mt-0.5" />
             <p className="text-sm text-rose-800 font-medium">
-              You have <span className="font-bold">{ACTIVE_RENTALS.length} active rentals</span> at the moment. Total estimated value: ₹2,250.
+              You have <span className="font-bold">{activeRentals.length} active rentals</span> at the moment. Total estimated value: ₹{totalEstimatedValue}.
             </p>
           </div>
         </div>
 
         {/* Rentals List Grid */}
         <div className="px-4 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
-          {filteredRentals.length > 0 ? (
+          {loading ? (
+             <div className="col-span-full py-16 flex flex-col items-center justify-center text-center">
+               <Loader2 className="w-8 h-8 text-violet-600 animate-spin mb-4" />
+               <h3 className="text-slate-900 font-bold text-lg">Loading Rentals...</h3>
+             </div>
+          ) : filteredRentals.length > 0 ? (
             filteredRentals.map((rental) => (
               <RentalCard 
                 key={rental.id} 
                 {...rental} 
-                onReturn={(id) => console.log("Return", id)}
-                onViewDetails={(id) => console.log("Details", id)}
+                onReturn={(id) => router.push(`/return/${id}`)}
+                onViewDetails={(id) => router.push(`/rentals/${id}`)}
               />
             ))
           ) : (
             <div className="col-span-full py-16 flex flex-col items-center justify-center text-center">
-              <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mb-4">
+              <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mb-4 shadow-sm">
                 <Clock className="w-8 h-8 text-slate-400" />
               </div>
               <h3 className="text-slate-900 font-bold text-lg mb-1">No active rentals</h3>
