@@ -27,10 +27,20 @@ async function main() {
     { name: 'Welding Machine', totalQuantity: 4, availableQuantity: 4, dailyPrice: 400.0, imageUrl: 'https://placeholder.com/welding' },
   ];
 
-  const tools = await Promise.all(
-    toolsData.map(tool => prisma.tool.create({ data: tool }))
-  );
-  console.log(`Created ${tools.length} tools`);
+  const tools = [];
+  for (const toolData of toolsData) {
+    const tool = await prisma.tool.create({ data: toolData });
+    tools.push(tool);
+    
+    // Create ToolItems for each tool
+    const toolItems = Array.from({ length: tool.totalQuantity }).map((_, i) => ({
+      toolId: tool.id,
+      itemNumber: `#${i + 1}`,
+      status: 'AVAILABLE' as const,
+    }));
+    await prisma.toolItem.createMany({ data: toolItems });
+  }
+  console.log(`Created ${tools.length} tools with their respective items`);
 
   console.log('Seeding Customers...');
   const customersData = Array.from({ length: 10 }).map((_, i) => ({

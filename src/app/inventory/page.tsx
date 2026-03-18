@@ -7,6 +7,7 @@ import { SearchBar } from "@/components/ui/SearchBar";
 import { ToolCard } from "@/components/ui/ToolCard";
 import { Plus, Search, Loader2 } from "lucide-react";
 import { getToolsAction } from "@/actions/tool.actions";
+import Link from "next/link";
 
 export default function InventoryPage() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -43,9 +44,9 @@ export default function InventoryPage() {
           <div className="flex flex-col gap-3">
             <div className="flex justify-between items-center px-1">
               <h2 className="text-slate-900 font-bold text-lg">All Tools</h2>
-              <button className="bg-gradient-to-r from-violet-600 to-fuchsia-500 hover:from-violet-700 hover:to-fuchsia-600 active:scale-95 transition-all text-white text-sm font-semibold px-4 py-2 rounded-[1.25rem] flex items-center justify-center gap-1.5 shadow-[0_2px_10px_-2px_rgba(79,70,229,0.3)]">
+              <Link href="/inventory/new" className="bg-gradient-to-r from-violet-600 to-teal-500 hover:from-violet-700 hover:to-teal-600 active:scale-95 transition-all text-white text-sm font-semibold px-4 py-2 rounded-[1.25rem] flex items-center justify-center gap-1.5 shadow-[0_2px_10px_-2px_rgba(79,70,229,0.3)]">
                 <Plus className="w-4 h-4" /> Add Tool
-              </button>
+              </Link>
             </div>
             <SearchBar 
               placeholder="Search tools by name..." 

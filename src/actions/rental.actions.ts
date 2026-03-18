@@ -47,7 +47,10 @@ export async function getActiveRentalsAction() {
       include: {
         customer: true,
         rentalItems: {
-          include: { tool: true },
+          include: { 
+            tool: true,
+            details: { include: { toolItem: true } }
+          },
         },
       },
       orderBy: { createdAt: 'desc' },
@@ -66,7 +69,10 @@ export async function getRentalByIdAction(rentalId: string) {
       include: {
         customer: true,
         rentalItems: {
-          include: { tool: true },
+          include: { 
+            tool: true,
+            details: { include: { toolItem: true } }
+          },
         },
         payments: true,
       },
@@ -94,20 +100,57 @@ export async function completeRentalAction(rentalId: string) {
   }
 }
 
-export async function getRentalHistoryAction() {
+export async function getRentalHistoryAction(timeFilter: string = 'All Time', searchQuery: string = '') {
   try {
+    let dateFilter = {};
+    const now = new Date();
+    
+    if (timeFilter === 'Today') {
+      const start = new Date(now.setHours(0,0,0,0));
+      dateFilter = { gte: start };
+    } else if (timeFilter === 'This Week') {
+      const start = new Date(now);
+      start.setDate(now.getDate() - now.getDay());
+      start.setHours(0,0,0,0);
+      dateFilter = { gte: start };
+    } else if (timeFilter === 'This Month') {
+      const start = new Date(now.getFullYear(), now.getMonth(), 1);
+      dateFilter = { gte: start };
+    }
+
+    const whereClause: any = { status: 'RETURNED' };
+    
+    if (timeFilter !== 'All Time') {
+      whereClause.returnedAt = dateFilter;
+    }
+
+    if (searchQuery) {
+      whereClause.OR = [
+        { customer: { name: { contains: searchQuery, mode: 'insensitive' } } },
+        { customer: { mobile: { contains: searchQuery } } }
+      ];
+    }
     const rentals = await prisma.rental.findMany({
-      where: { status: 'RETURNED' },
+      where: whereClause,
       include: {
         customer: true,
         rentalItems: {
-          include: { tool: true },
+          include: { 
+            tool: true,
+            details: { include: { toolItem: true } }
+          },
         },
         payments: true,
       },
       orderBy: { returnedAt: 'desc' },
     });
-    return { success: true, data: rentals };
+    
+    const summary = rentals.reduce((acc, r) => ({
+      transactions: acc.transactions + 1,
+      totalEarned: acc.totalEarned + (r.totalAmount || 0)
+    }), { transactions: 0, totalEarned: 0 });
+
+    return { success: true, data: rentals, summary };
   } catch (error: any) {
     console.error('getRentalHistoryAction Error:', error);
     return { success: false, error: error.message || 'Failed to fetch history' };

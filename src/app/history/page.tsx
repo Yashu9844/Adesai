@@ -16,12 +16,15 @@ export default function HistoryPage() {
   const [activeFilter, setActiveFilter] = useState("All Time");
   
   const [history, setHistory] = useState<any[]>([]);
+  const [overview, setOverview] = useState({ transactions: 0, totalEarned: 0 });
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchHistory() {
-      const res = await getRentalHistoryAction();
+      setLoading(true);
+      const res = await getRentalHistoryAction(activeFilter);
       if (res.success && res.data) {
+        setOverview(res.summary || { transactions: 0, totalEarned: 0 });
         const mappedData = res.data.map((r: any) => {
           const startDate = new Date(r.startDate);
           const endDate = new Date(r.returnedAt);
@@ -44,7 +47,7 @@ export default function HistoryPage() {
       setLoading(false);
     }
     fetchHistory();
-  }, []);
+  }, [activeFilter]);
 
   const filteredHistory = history.filter((record) => {
     const q = searchQuery.toLowerCase();
@@ -58,7 +61,7 @@ export default function HistoryPage() {
     return matchesSearch;
   });
 
-  const totalEarned = history.reduce((sum, record) => sum + record.totalAmountPaid, 0);
+  const totalEarned = filteredHistory.reduce((sum, record) => sum + record.totalAmountPaid, 0);
 
   return (
     <div className="min-h-screen bg-transparent flex flex-col">
@@ -80,13 +83,27 @@ export default function HistoryPage() {
           />
         </div>
 
-        {/* Total Summary Mini-Banner */}
-        <div className="px-4 mb-5 pt-2">
-          <div className="flex items-center justify-between text-sm px-1">
-            <span className="text-slate-500 font-medium">Showing <strong className="text-slate-900">{filteredHistory.length}</strong> transactions</span>
-            <span className="text-slate-500 font-medium">Earned: <strong className="text-violet-600">₹{totalEarned}</strong></span>
+        {/* Global Backend Overview Cards */}
+        <div className="px-4 grid grid-cols-2 gap-3 mb-5 pt-2">
+          <div className="bg-white/60 backdrop-blur-md rounded-2xl p-4 border border-white/60 shadow-sm flex flex-col justify-center items-center">
+             <span className="text-[10px] font-bold text-slate-500 tracking-widest uppercase mb-1">Total Earned</span>
+             <span className="text-2xl font-extrabold text-violet-600">₹{overview.totalEarned}</span>
+          </div>
+          <div className="bg-white/60 backdrop-blur-md rounded-2xl p-4 border border-white/60 shadow-sm flex flex-col justify-center items-center">
+             <span className="text-[10px] font-bold text-slate-500 tracking-widest uppercase mb-1">Transactions</span>
+             <span className="text-2xl font-extrabold text-slate-800">{overview.transactions}</span>
           </div>
         </div>
+
+        {/* Local Summary Mini-Banner for Search */}
+        {searchQuery && (
+          <div className="px-5 mb-4">
+            <div className="flex items-center justify-between text-xs px-2 py-1.5 bg-slate-100/50 rounded-lg">
+              <span className="text-slate-500 font-semibold">Found <strong className="text-slate-800">{filteredHistory.length}</strong> matches</span>
+              <span className="text-slate-500 font-semibold">Value: <strong className="text-violet-600">₹{totalEarned}</strong></span>
+            </div>
+          </div>
+        )}
 
         {/* History List Grid */}
         <div className="px-4 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">

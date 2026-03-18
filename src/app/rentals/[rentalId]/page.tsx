@@ -117,23 +117,35 @@ export default function RentalDetailsPage({ params }: { params: Promise<{ rental
         <section>
           <h2 className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-3 pl-1">Tools Rented</h2>
           <div className="bg-white/60 backdrop-blur-2xl rounded-[1.5rem] shadow-[0_8px_30px_rgba(0,0,0,0.04)] border border-white/80 overflow-hidden divide-y divide-slate-100">
-            {rental.rentalItems.map((item: any) => (
-               <div key={item.id} className="p-4 flex justify-between items-center group hover:bg-white/40 transition-colors">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-violet-50 flex items-center justify-center text-violet-600 group-hover:scale-110 transition-transform">
-                      <Package className="w-5 h-5" />
+            {rental.rentalItems.map((item: any) => {
+               const assigned = item.details?.filter((d:any) => d.toolItem?.itemNumber).map((d:any) => d.toolItem.itemNumber);
+               return (
+                 <div key={item.id} className="p-4 flex justify-between items-start group hover:bg-white/40 transition-colors">
+                    <div className="flex items-start gap-3">
+                      <div className="w-10 h-10 rounded-xl bg-violet-50 flex items-center justify-center text-violet-600 group-hover:scale-110 transition-transform shrink-0">
+                        <Package className="w-5 h-5" />
+                      </div>
+                      <div className="flex flex-col gap-1">
+                        <h4 className="font-bold text-slate-800 text-sm leading-tight">{item.tool.name}</h4>
+                        <div className="text-[11px] font-semibold text-slate-400 mt-0.5">₹{item.dailyPriceSnapshot}/day</div>
+                        {assigned && assigned.length > 0 && (
+                          <div className="flex flex-wrap gap-1 mt-1">
+                            {assigned.map((no: string) => (
+                              <span key={no} className="text-[10px] font-bold text-violet-600 bg-violet-100/50 border border-violet-200 px-1.5 py-0.5 rounded">
+                                #{no}
+                              </span>
+                            ))}
+                          </div>
+                        )}
+                      </div>
                     </div>
-                    <div>
-                      <h4 className="font-bold text-slate-800 text-sm leading-tight">{item.tool.name}</h4>
-                      <div className="text-xs font-semibold text-slate-400 mt-0.5">₹{item.dailyPriceSnapshot}/day</div>
+                    <div className="bg-slate-100 px-3 py-1 rounded-lg shrink-0 mt-1">
+                        <span className="text-xs font-bold text-slate-500 uppercase tracking-wider mr-1">Qty</span>
+                        <span className="text-sm font-extrabold text-slate-900">{item.quantity}</span>
                     </div>
-                  </div>
-                  <div className="bg-slate-100 px-3 py-1 rounded-lg">
-                      <span className="text-xs font-bold text-slate-500 uppercase tracking-wider mr-1">Qty</span>
-                      <span className="text-sm font-extrabold text-slate-900">{item.quantity}</span>
-                  </div>
-               </div>
-            ))}
+                 </div>
+               )
+            })}
             
             <div className="p-4 bg-violet-50/50 flex justify-between items-center">
                 <span className="text-sm font-bold text-violet-900">Combined Rate</span>

@@ -27,11 +27,20 @@ export default function ActiveRentalsPage() {
           let totalQty = 0;
           let currentCost = 0;
           let toolNames = [];
+          let assignedItemsList: string[] = [];
 
           for (const item of r.rentalItems) {
             totalQty += item.quantity;
             currentCost += (item.quantity * item.dailyPriceSnapshot * daysRunning);
             toolNames.push(`${item.tool.name} (x${item.quantity})`);
+            
+            if (item.details) {
+              item.details.forEach((d: any) => {
+                if (d.toolItem && d.toolItem.itemNumber) {
+                   assignedItemsList.push(d.toolItem.itemNumber);
+                }
+              });
+            }
           }
 
           return {
@@ -44,6 +53,7 @@ export default function ActiveRentalsPage() {
             startDate: startDate.toLocaleDateString(),
             daysRunning,
             estimatedCost: currentCost,
+            assignedItems: assignedItemsList,
           };
         });
 

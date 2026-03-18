@@ -17,6 +17,26 @@ model Tool {
   createdAt         DateTime     @default(now())
   updatedAt         DateTime     @updatedAt
   rentalItems       RentalItem[]
+  toolItems         ToolItem[]
+}
+
+model ToolItem {
+  id          String   @id @default(uuid())
+  toolId      String
+  tool        Tool     @relation(fields: [toolId], references: [id])
+  itemNumber  String
+  status      ItemStatus @default(AVAILABLE)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  rentalItemDetails RentalItemDetail[]
+
+  @@unique([toolId, itemNumber])
+}
+
+enum ItemStatus {
+  AVAILABLE
+  RENTED
 }
 
 model Customer {
@@ -48,13 +68,28 @@ model Rental {
 
 model RentalItem {
   id                 String   @id @default(uuid())
-  rental             Rental   @relation(fields: [rentalId], references: [id])
   rentalId           String
-  tool               Tool     @relation(fields: [toolId], references: [id])
+  rental             Rental   @relation(fields: [rentalId], references: [id])
   toolId             String
+  tool               Tool     @relation(fields: [toolId], references: [id])
   quantity           Int
-  returnedQuantity   Int      @default(0)
-  dailyPriceSnapshot Float
+  dailyPriceSnapshot Float    // Captured at the time of rental
+  returnedQuantity   Int      @default(0) // Track partial returns
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @default(now()) @updatedAt
+
+  details            RentalItemDetail[]
+}
+
+model RentalItemDetail {
+  id           String     @id @default(uuid())
+  rentalItemId String
+  rentalItem   RentalItem @relation(fields: [rentalItemId], references: [id])
+  toolItemId   String
+  toolItem     ToolItem   @relation(fields: [toolItemId], references: [id])
+  status       ItemStatus @default(RENTED)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
 }
 
 model Payment {

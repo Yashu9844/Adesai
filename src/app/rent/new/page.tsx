@@ -21,6 +21,7 @@ export default function PremiumRentPage() {
   
   // Selection State
   const [selectedTool, setSelectedTool] = useState<string | null>(null);
+  const [selectedItems, setSelectedItems] = useState<string[]>([]);
   const [qty, setQty] = useState("1");
   const [focusInput, setFocusInput] = useState<string | null>(null);
 
@@ -75,8 +76,9 @@ export default function PremiumRentPage() {
       },
       items: [{
         toolId: tool.id,
-        quantity: parseInt(qty),
+        quantity: selectedItems.length > 0 ? selectedItems.length : parseInt(qty),
         dailyPriceSnapshot: tool.dailyPrice,
+        ...(selectedItems.length > 0 ? { itemNumbers: selectedItems } : {})
       }]
     }, customerPhoto || undefined);
 
@@ -131,7 +133,7 @@ export default function PremiumRentPage() {
               return (
                 <button
                   key={tool.id}
-                  onClick={() => { setSelectedTool(tool.id); setQty("1"); }}
+                  onClick={() => { setSelectedTool(tool.id); setSelectedItems([]); setQty("1"); }}
                   className={cn(
                     "relative text-left p-5 rounded-[1.5rem] transition-all duration-300 ease-out flex flex-col gap-3 group overflow-hidden outline-none",
                     isActive 
@@ -167,22 +169,58 @@ export default function PremiumRentPage() {
             })}
           </div>
 
-          <div className="mt-8 bg-white/50 backdrop-blur-xl rounded-[1.5rem] p-5 shadow-[0_8px_30px_rgba(0,0,0,0.04)] border border-white/60 flex items-center justify-between">
-            <span className="font-bold text-slate-700">Quantity</span>
-            <div className="flex items-center gap-4 bg-white rounded-xl p-1 shadow-sm border border-slate-100">
-              <button 
-                onClick={() => setQty(String(Math.max(1, parseInt(qty) - 1)))}
-                className="w-10 h-10 rounded-lg bg-slate-50 text-slate-600 hover:bg-slate-100 flex items-center justify-center text-lg font-bold"
-              >-</button>
-              <span className="text-lg font-bold w-6 text-center text-violet-600">{qty}</span>
-              <button 
-                onClick={() => {
-                   const maxStock = tools.find(t => t.id === selectedTool)?.availableQuantity || 1;
-                   setQty(String(Math.min(maxStock, parseInt(qty) + 1)));
-                }}
-                className="w-10 h-10 rounded-lg bg-slate-50 text-slate-600 hover:bg-slate-100 flex items-center justify-center text-lg font-bold"
-              >+</button>
-            </div>
+          <div className="mt-8 bg-white/50 backdrop-blur-xl rounded-[1.5rem] p-5 shadow-[0_8px_30px_rgba(0,0,0,0.04)] border border-white/60">
+            {selectedTool ? (
+              <div className="flex flex-col gap-3">
+                <span className="font-bold text-slate-700 text-sm">Select Specific Items (Optional)</span>
+                <div className="flex flex-wrap gap-2 max-h-[120px] overflow-y-auto pr-2 custom-scrollbar">
+                  {tools.find(t=>t.id===selectedTool)?.toolItems?.filter((i:any)=>i.status==='AVAILABLE').map((item: any) => {
+                    const isSelected = selectedItems.includes(item.itemNumber);
+                    return (
+                      <button
+                        key={item.id}
+                        onClick={() => {
+                          if (isSelected) {
+                            setSelectedItems(prev => prev.filter(num => num !== item.itemNumber));
+                          } else {
+                            setSelectedItems(prev => [...prev, item.itemNumber]);
+                          }
+                        }}
+                        className={cn("px-3 py-1.5 rounded-lg text-xs font-bold transition-all border", isSelected ? "bg-violet-600 text-white border-violet-600 shadow-md" : "bg-white text-slate-600 border-slate-200 hover:border-violet-300")}
+                      >
+                        {item.itemNumber}
+                      </button>
+                    )
+                  })}
+                </div>
+                {selectedItems.length === 0 && (
+                  <div className="flex items-center justify-between mt-2 pt-3 border-t border-slate-200/50">
+                    <span className="font-bold text-slate-700 text-sm">Auto-Assign Quantity</span>
+                    <div className="flex items-center gap-4 bg-white rounded-xl p-1 shadow-sm border border-slate-100">
+                      <button 
+                        onClick={() => setQty(String(Math.max(1, parseInt(qty) - 1)))}
+                        className="w-10 h-10 rounded-lg bg-slate-50 text-slate-600 hover:bg-slate-100 flex items-center justify-center text-lg font-bold"
+                      >-</button>
+                      <span className="text-lg font-bold w-6 text-center text-violet-600">{qty}</span>
+                      <button 
+                        onClick={() => {
+                           const maxStock = tools.find(t => t.id === selectedTool)?.availableQuantity || 1;
+                           setQty(String(Math.min(maxStock, parseInt(qty) + 1)));
+                        }}
+                        className="w-10 h-10 rounded-lg bg-slate-50 text-slate-600 hover:bg-slate-100 flex items-center justify-center text-lg font-bold"
+                      >+</button>
+                    </div>
+                  </div>
+                )}
+                {selectedItems.length > 0 && (
+                   <div className="text-xs font-semibold text-violet-600 mt-1">
+                     {selectedItems.length} specific items selected.
+                   </div>
+                )}
+              </div>
+            ) : (
+                <div className="text-sm font-medium text-slate-400 text-center py-2">Select a tool above to configure quantity</div>
+            )}
           </div>
         </div>
 
@@ -270,7 +308,7 @@ export default function PremiumRentPage() {
               <div className="mt-8 text-center border-b border-dashed border-slate-200 pb-6 mb-6">
                 <span className="text-[10px] uppercase font-bold tracking-widest text-slate-400 mb-1 block">Total Daily Rent</span>
                 <div className="text-4xl font-extrabold text-slate-800 tracking-tighter">
-                  ₹{selectedTool ? tools.find(t=>t.id===selectedTool)?.dailyPrice * parseInt(qty) : 0}
+                  ₹{selectedTool ? tools.find(t=>t.id===selectedTool)?.dailyPrice * (selectedItems.length > 0 ? selectedItems.length : parseInt(qty)) : 0}
                 </div>
                 <span className="text-sm font-semibold text-emerald-600 mt-2 block bg-emerald-50 w-max mx-auto px-3 py-1 rounded-full">
                   No advance required
@@ -280,7 +318,7 @@ export default function PremiumRentPage() {
               <div className="flex flex-col gap-4">
                  <div className="flex justify-between items-center text-sm font-semibold">
                    <span className="text-slate-500 flex items-center gap-2"><Package className="w-4 h-4" /> Item</span>
-                   <span className="text-slate-900 border-b border-dashed border-slate-300 pb-0.5">{qty}x {selectedTool ? tools.find(t=>t.id===selectedTool)?.name : ''}</span>
+                   <span className="text-slate-900 border-b border-dashed border-slate-300 pb-0.5">{(selectedItems.length > 0 ? selectedItems.length : parseInt(qty))}x {selectedTool ? tools.find(t=>t.id===selectedTool)?.name : ''}</span>
                  </div>
                  <div className="flex justify-between items-center text-sm font-semibold">
                    <span className="text-slate-500 flex items-center gap-2"><User className="w-4 h-4" /> Customer</span>

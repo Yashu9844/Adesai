@@ -12,6 +12,7 @@ interface RentalCardProps {
   startDate: string;
   daysRunning: number;
   estimatedCost: number;
+  assignedItems?: string[];
   onReturn?: (id: string) => void;
   onViewDetails?: (id: string) => void;
 }
@@ -27,6 +28,7 @@ export function RentalCard({
   startDate,
   daysRunning,
   estimatedCost,
+  assignedItems,
   onReturn,
   onViewDetails,
 }: RentalCardProps) {
@@ -62,12 +64,23 @@ export function RentalCard({
 
       {/* Middle Content: Tool & Rental Stats */}
       <div className="flex flex-col gap-3">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2 text-sm font-semibold text-slate-900">
-            <Package className="w-4 h-4 text-violet-500" />
-            {quantity}x {toolName}
+        <div className="flex items-start justify-between">
+          <div className="flex flex-col gap-1.5">
+            <div className="flex items-center gap-2 text-sm font-semibold text-slate-900">
+              <Package className="w-4 h-4 text-violet-500" />
+              {quantity}x {toolName}
+            </div>
+            {assignedItems && assignedItems.length > 0 && (
+              <div className="flex flex-wrap gap-1 pr-2">
+                {assignedItems.map(no => (
+                  <span key={no} className="text-[9px] font-bold text-slate-500 bg-slate-100 border border-slate-200 px-1.5 py-0.5 rounded">
+                    {no}
+                  </span>
+                ))}
+              </div>
+            )}
           </div>
-          <div className="text-sm font-bold text-violet-600 bg-violet-50 px-2.5 py-1 rounded-[1rem]">
+          <div className="text-sm font-bold text-violet-600 bg-violet-50 px-2.5 py-1 rounded-[1rem] whitespace-nowrap">
             ₹{estimatedCost}
           </div>
         </div>

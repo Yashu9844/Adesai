@@ -13,6 +13,7 @@ export interface CreateRentalParams {
     toolId: string;
     quantity: number;
     dailyPriceSnapshot: number;
+    itemNumbers?: string[]; // Specific numbered items selected in UI
   }[];
   expectedDays: number;
   advanceAmount: number;
@@ -21,12 +22,7 @@ export interface CreateRentalParams {
 
 export const rentalService = {
   /**
-   * Handles the entire checkout flow for a new Rental.
-   * 1. Validates stock
-   * 2. Upserts Customer
-   * 3. Creates Rental + RentalItems + Payment (Advance)
-   * 4. Decrements Tool Stock
-   * All wrapped in a Prisma Transaction to prevent orphaned data.
+   * Handles the checkout flow for a new Rental with Individual Item Tracking.
    */
   async createRental(params: CreateRentalParams) {
     // 1. Pre-flight check: Ensure all tools have enough available stock
@@ -92,8 +88,59 @@ export const rentalService = {
         },
       });
 
-      // Update Inventory Quantities (Decrement)
+      // Handle Individual Item Tracking and Inventory Update
       for (const item of params.items) {
+        let selectedItemIds: string[] = [];
+
+        if (item.itemNumbers && item.itemNumbers.length > 0) {
+          // Verify requested specific items
+          if (item.itemNumbers.length !== item.quantity) {
+             throw new Error(`Quantity mismatch for selected items on tool ID: ${item.toolId}`);
+          }
+          const specificItems = await tx.toolItem.findMany({
+            where: {
+              toolId: item.toolId,
+              itemNumber: { in: item.itemNumbers },
+              status: 'AVAILABLE',
+            },
+          });
+          if (specificItems.length !== item.quantity) {
+             throw new Error(`One or more requested items are currently unavailable for tool ID: ${item.toolId}`);
+          }
+          selectedItemIds = specificItems.map(i => i.id);
+        } else {
+          // Auto-assign available items (Backward Compatibility)
+          const availableItems = await tx.toolItem.findMany({
+            where: { toolId: item.toolId, status: 'AVAILABLE' },
+            take: item.quantity,
+            orderBy: { itemNumber: 'asc' },
+          });
+          if (availableItems.length !== item.quantity) {
+            throw new Error(`Not enough available numbered items to auto-assign for tool ID: ${item.toolId}`);
+          }
+          selectedItemIds = availableItems.map(i => i.id);
+        }
+
+        // 1. Mark ToolItems individually as RENTED
+        await tx.toolItem.updateMany({
+          where: { id: { in: selectedItemIds } },
+          data: { status: 'RENTED' },
+        });
+
+        // 2. Map RentalItemDetails
+        const createdRentalItem = rental.rentalItems.find(ri => ri.toolId === item.toolId);
+        if (createdRentalItem) {
+          const detailsToCreate = selectedItemIds.map(toolItemId => ({
+            rentalItemId: createdRentalItem.id,
+            toolItemId,
+            status: 'RENTED' as const,
+          }));
+          await tx.rentalItemDetail.createMany({
+            data: detailsToCreate,
+          });
+        }
+
+        // 3. Update Parent Catalog Tool Quantities (Decrement)
         await tx.tool.update({
           where: { id: item.toolId },
           data: {

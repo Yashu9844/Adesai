@@ -65,7 +65,14 @@ export default function ReturnToolPage({ params }: { params: Promise<{ rentalId:
   const totalAdvance = rental.payments.filter((p: any) => p.type === 'ADVANCE').reduce((acc: number, p: any) => acc + p.amount, 0);
   
   // Combine all items into a readable string and combined daily price
-  const toolNames = rental.rentalItems.map((i: any) => `${i.tool.name} (x${i.quantity})`).join(', ');
+  const toolNames = rental.rentalItems.map((i: any) => {
+    let base = `${i.tool.name} (x${i.quantity})`;
+    const assigned = i.details?.filter((d:any) => d.toolItem?.itemNumber).map((d:any) => `#${d.toolItem.itemNumber}`);
+    if (assigned && assigned.length > 0) {
+      base += ` [${assigned.join(', ')}]`;
+    }
+    return base;
+  }).join('  •  ');
   const combinedDailyPrice = rental.rentalItems.reduce((acc: number, item: any) => acc + (item.quantity * item.dailyPriceSnapshot), 0);
 
   return (

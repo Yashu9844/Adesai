@@ -1,42 +1,84 @@
 import { prisma } from '../lib/prisma';
-import { Tool } from '@prisma/client';
+import { Tool, ToolItem } from '@prisma/client';
 
 export const inventoryService = {
   /**
    * Fetch all tools in the inventory.
    */
-  async getAllTools(): Promise<Tool[]> {
+  async getAllTools() {
     return prisma.tool.findMany({
+      include: {
+        toolItems: {
+          orderBy: { itemNumber: 'asc' },
+        },
+      },
       orderBy: { name: 'asc' },
     });
   },
 
   /**
-   * Add a new tool type to the inventory.
+   * Fetch specifically available numbered items for a given tool catalog entry.
    */
-  async addTool(data: Omit<Tool, 'id' | 'createdAt' | 'updatedAt'>): Promise<Tool> {
-    return prisma.tool.create({
-      data,
+  async getAvailableToolItems(toolId: string): Promise<ToolItem[]> {
+    return prisma.toolItem.findMany({
+      where: {
+        toolId,
+        status: 'AVAILABLE',
+      },
+      orderBy: { itemNumber: 'asc' },
     });
   },
 
   /**
-   * Master override to update the total quantity of a tool (e.g., buying new stock).
-   * Also adjusts the availableQuantity proportionally.
+   * Add a new tool type to the inventory and auto-generate numbered items.
+   */
+  async addTool(data: Omit<Tool, 'id' | 'createdAt' | 'updatedAt'>): Promise<Tool> {
+    return prisma.$transaction(async (tx) => {
+      const tool = await tx.tool.create({ data });
+      if (tool.totalQuantity > 0) {
+        const toolItems = Array.from({ length: tool.totalQuantity }).map((_, i) => ({
+          toolId: tool.id,
+          itemNumber: `#${i + 1}`,
+          status: 'AVAILABLE' as const,
+        }));
+        await tx.toolItem.createMany({ data: toolItems });
+      }
+      return tool;
+    });
+  },
+
+  /**
+   * Update the total quantity of a tool (e.g., buying new stock).
+   * Auto-generates missing ToolItems if quantity is increased.
    */
   async updateToolQuantity(toolId: string, newTotalQuantity: number): Promise<Tool> {
-    const tool = await prisma.tool.findUnique({ where: { id: toolId } });
-    if (!tool) throw new Error('Tool not found');
+    return prisma.$transaction(async (tx) => {
+      const tool = await tx.tool.findUnique({ 
+        where: { id: toolId },
+        include: { toolItems: true } 
+      });
+      if (!tool) throw new Error('Tool not found');
 
-    const difference = newTotalQuantity - tool.totalQuantity;
-    const newAvailable = Math.max(0, tool.availableQuantity + difference);
+      const difference = newTotalQuantity - tool.totalQuantity;
+      const newAvailable = Math.max(0, tool.availableQuantity + difference);
 
-    return prisma.tool.update({
-      where: { id: toolId },
-      data: {
-        totalQuantity: newTotalQuantity,
-        availableQuantity: newAvailable,
-      },
+      if (difference > 0) {
+        const existingCount = tool.toolItems.length;
+        const newItems = Array.from({ length: difference }).map((_, i) => ({
+          toolId: tool.id,
+          itemNumber: `#${existingCount + i + 1}`,
+          status: 'AVAILABLE' as const,
+        }));
+        await tx.toolItem.createMany({ data: newItems });
+      }
+
+      return tx.tool.update({
+        where: { id: toolId },
+        data: {
+          totalQuantity: newTotalQuantity,
+          availableQuantity: newAvailable,
+        },
+      });
     });
   },
 
@@ -52,9 +94,7 @@ export const inventoryService = {
   },
 
   /**
-   * Low-level method to decrement/increment the available stock.
-   * Typically called by RentalService during checkout or return.
-   * `amountToChange` should be negative for rentals (decreasing stock) and positive for returns.
+   * Low-level method to decrement/increment the available stock count.
    */
   async updateAvailableQuantity(toolId: string, amountToChange: number): Promise<Tool> {
     const tool = await prisma.tool.findUnique({ where: { id: toolId } });

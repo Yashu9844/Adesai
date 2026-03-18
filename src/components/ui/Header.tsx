@@ -4,6 +4,7 @@ interface HeaderProps {
   title: string;
   subtitle?: string; // Kept in props so other pages don't break, but unused in rendering for minimalism
   showNotification?: boolean;
+  onBack?: () => void;
 }
 
 export function Header({ title, showNotification = true }: HeaderProps) {

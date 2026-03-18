@@ -29,7 +29,9 @@ export const billingService = {
     const rental = await prisma.rental.findUnique({
       where: { id: rentalId },
       include: {
-        rentalItems: true,
+        rentalItems: {
+          include: { details: true }
+        },
         payments: true,
         customer: true,
       },
@@ -87,6 +89,21 @@ export const billingService = {
 
       // 3. Mark Items as Returned & Replenish Stock
       for (const item of rental.rentalItems) {
+        // Release specific tool items back to available pool
+        if (item.details && item.details.length > 0) {
+          const toolItemIds = item.details.map((d: any) => d.toolItemId);
+          
+          await tx.toolItem.updateMany({
+            where: { id: { in: toolItemIds } },
+            data: { status: 'AVAILABLE' },
+          });
+
+          await tx.rentalItemDetail.updateMany({
+            where: { rentalItemId: item.id },
+            data: { status: 'AVAILABLE' },
+          });
+        }
+
         // Update item returned quantity
         await tx.rentalItem.update({
           where: { id: item.id },
