@@ -1,10 +1,11 @@
 "use client";
 
-import { Bell, ArrowLeft, X, User, Package, Clock } from "lucide-react";
+import { Bell, ArrowLeft, X, User, Package, Clock, LogOut } from "lucide-react";
 import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
 import { getTodayTasksAction } from "@/actions/rental.actions";
+import { logoutAction } from "@/actions/auth.actions";
 import { cn } from "@/lib/utils";
 
 interface HeaderProps {
@@ -71,6 +72,14 @@ export function Header({ title, showNotification = true, onBack }: HeaderProps) 
                 )}
               </button>
             )}
+
+            <button 
+              onClick={() => logoutAction()}
+              className="relative w-10 h-10 flex items-center justify-center text-slate-300 hover:text-white bg-white/5 hover:bg-white/15 rounded-full transition-all duration-200 active:scale-95 border border-white/5 shadow-sm"
+              title="Logout"
+            >
+              <LogOut className="w-[18px] h-[18px]" strokeWidth={2.5} />
+            </button>
 
             {/* Profile Picture Placeholder */}
             <Link href="/" className="relative ml-1 shadow-[0_4px_12px_rgba(124,58,237,0.3)] rounded-full active:scale-90 transition-transform">
