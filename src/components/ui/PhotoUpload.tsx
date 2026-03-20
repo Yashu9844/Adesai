@@ -34,7 +34,7 @@ export function PhotoUpload({ label, onPhotoSelect }: PhotoUploadProps) {
       
       <div 
         onClick={() => inputRef.current?.click()}
-        className={`relative w-full h-32 rounded-[1.25rem] border-2 border-dashed transition-all duration-200 cursor-pointer overflow-hidden group flex flex-col items-center justify-center
+        className={`relative w-48 aspect-square mx-auto rounded-[2rem] border-2 border-dashed transition-all duration-200 cursor-pointer overflow-hidden group flex flex-col items-center justify-center
           ${preview 
             ? 'border-violet-200 bg-violet-50/30' 
             : 'border-slate-200 bg-slate-50 hover:bg-slate-100 hover:border-violet-300'

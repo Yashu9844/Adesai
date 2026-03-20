@@ -222,79 +222,86 @@ export default function PremiumRentPage() {
                 <div className="text-sm font-medium text-slate-400 text-center py-2">Select a tool above to configure quantity</div>
             )}
           </div>
-        </div>
-
-        {/* Step 2: Customer Input */}
+        </div>        {/* Step 2: Customer Input */}
         <div className={cn("transition-all duration-500 ease-out transform", step === 2 ? "opacity-100 translate-x-0" : step < 2 ? "opacity-0 translate-x-full absolute pointer-events-none" : "opacity-0 -translate-x-full absolute pointer-events-none")}>
-          <div className="bg-white/60 backdrop-blur-[20px] rounded-[2rem] p-6 shadow-[0_12px_40px_rgba(0,0,0,0.06)] border border-white/80 flex flex-col gap-6 relative overflow-hidden">
-             
-             <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-violet-500 via-fuchsia-500 to-rose-500 opacity-50" />
+          <div className="flex flex-col gap-6">
+            <div className="bg-white/60 backdrop-blur-[20px] rounded-[2rem] p-6 shadow-[0_12px_40px_rgba(0,0,0,0.06)] border border-white/80 flex flex-col gap-6 relative overflow-hidden">
+               <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-violet-500 via-fuchsia-500 to-rose-500 opacity-50" />
+               
+               <div className="space-y-5">
+                 <CustomInput 
+                   icon={<User className="w-5 h-5" />} 
+                   label="Customer Name" 
+                   placeholder="e.g. Ramesh Kumar"
+                   value={customerName}
+                   onChange={(e: any) => setCustomerName(e.target.value)}
+                   isFocused={focusInput === 'name'}
+                   onFocus={() => setFocusInput('name')}
+                   onBlur={() => setFocusInput(null)}
+                 />
+                 
+                 <CustomInput 
+                   icon={<Phone className="w-5 h-5" />} 
+                   label="Mobile Number" 
+                   type="tel"
+                   placeholder="10-digit number"
+                   value={customerPhone}
+                   onChange={(e: any) => setCustomerPhone(e.target.value)}
+                   isFocused={focusInput === 'phone'}
+                   onFocus={() => setFocusInput('phone')}
+                   onBlur={() => setFocusInput(null)}
+                 />
 
-             <CustomInput 
-               icon={<User className="w-5 h-5" />} 
-               label="Customer Name" 
-               placeholder="e.g. Ramesh Kumar"
-               value={customerName}
-               onChange={(e: any) => setCustomerName(e.target.value)}
-               isFocused={focusInput === 'name'}
-               onFocus={() => setFocusInput('name')}
-               onBlur={() => setFocusInput(null)}
-             />
-             
-             <CustomInput 
-               icon={<Phone className="w-5 h-5" />} 
-               label="Mobile Number" 
-               type="tel"
-               placeholder="10-digit number"
-               value={customerPhone}
-               onChange={(e: any) => setCustomerPhone(e.target.value)}
-               isFocused={focusInput === 'phone'}
-               onFocus={() => setFocusInput('phone')}
-               onBlur={() => setFocusInput(null)}
-             />
+                 <CustomInput 
+                   icon={<MapPin className="w-5 h-5" />} 
+                   label="Village / Address" 
+                   placeholder="e.g. Ramnagar"
+                   value={customerVillage}
+                   onChange={(e: any) => setCustomerVillage(e.target.value)}
+                   isFocused={focusInput === 'location'}
+                   onFocus={() => setFocusInput('location')}
+                   onBlur={() => setFocusInput(null)}
+                 />
+               </div>
+            </div>
+            
+            <div className="bg-white/40 backdrop-blur-xl rounded-[2rem] p-6 border border-white/60 shadow-sm flex flex-col items-center">
+              <span className="text-xs font-bold text-slate-400 uppercase tracking-[0.15em] mb-4">Identity Verification</span>
+              
+              {/* Hidden Input for Camera/File picker */}
+              <input 
+                type="file" 
+                accept="image/*" 
+                capture="environment" 
+                ref={fileInputRef} 
+                className="hidden" 
+                onChange={handlePhotoUpload}
+              />
 
-             <CustomInput 
-               icon={<MapPin className="w-5 h-5" />} 
-               label="Village / Address" 
-               placeholder="e.g. Ramnagar"
-               value={customerVillage}
-               onChange={(e: any) => setCustomerVillage(e.target.value)}
-               isFocused={focusInput === 'location'}
-               onFocus={() => setFocusInput('location')}
-               onBlur={() => setFocusInput(null)}
-             />
-          </div>
-          
-          <div className="mt-6 flex flex-col items-center">
-            {/* Hidden Input for Camera/File picker */}
-            <input 
-              type="file" 
-              accept="image/*" 
-              capture="environment" 
-              ref={fileInputRef} 
-              className="hidden" 
-              onChange={handlePhotoUpload}
-            />
-
-            {customerPhoto ? (
-              <div className="relative group rounded-2xl overflow-hidden shadow-lg border-[3px] border-white max-w-[200px]">
-                 <img src={customerPhoto} alt="Customer" className="w-full h-auto object-cover" />
-                 <button 
-                  onClick={() => setCustomerPhoto(null)}
-                  className="absolute inset-0 bg-black/50 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity font-bold text-sm"
-                 >Tap to Remove</button>
-              </div>
-            ) : (
-              <div className="flex gap-4">
+              {customerPhoto ? (
+                <div className="relative group w-40 aspect-square rounded-[2.5rem] overflow-hidden shadow-2xl border-4 border-white ring-1 ring-slate-200">
+                   <img src={customerPhoto} alt="Customer" className="w-full h-full object-cover" />
+                   <button 
+                    onClick={() => setCustomerPhoto(null)}
+                    className="absolute inset-0 bg-black/60 text-white flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity font-bold text-xs gap-2"
+                   >
+                     <Upload className="w-5 h-5" />
+                     <span>Change Photo</span>
+                   </button>
+                </div>
+              ) : (
                 <button 
                   onClick={() => fileInputRef.current?.click()}
-                  className="flex items-center gap-2 text-sm font-bold text-violet-600 bg-white/60 backdrop-blur shadow-sm border border-white/80 px-5 py-3 rounded-full hover:bg-white transition-colors"
+                  className="w-40 aspect-square rounded-[2.5rem] bg-slate-50 border-2 border-dashed border-slate-200 flex flex-col items-center justify-center gap-3 text-slate-400 hover:bg-white hover:border-violet-300 hover:text-violet-500 transition-all duration-300 group shadow-inner"
                 >
-                  <Camera className="w-4 h-4" /> Capture Photo
+                  <div className="w-12 h-12 rounded-2xl bg-white shadow-sm flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <Camera className="w-6 h-6" />
+                  </div>
+                  <span className="text-xs font-bold">Capture Photo</span>
                 </button>
-              </div>
-            )}
-            <p className="text-xs text-slate-400 mt-2 font-medium">For security/verification (Optional)</p>
+              )}
+              <p className="text-[10px] text-slate-400 mt-4 font-semibold text-center italic opacity-70 px-4">Tap to capture the customer's photo for your records.</p>
+            </div>
           </div>
         </div>
 

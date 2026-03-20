@@ -156,3 +156,25 @@ export async function getRentalHistoryAction(timeFilter: string = 'All Time', se
     return { success: false, error: error.message || 'Failed to fetch history' };
   }
 }
+export async function getTodayTasksAction() {
+  try {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const activeRentals = await prisma.rental.findMany({
+      where: { status: 'ACTIVE' },
+      include: {
+        customer: true,
+        rentalItems: { include: { tool: true } }
+      },
+      orderBy: { createdAt: 'asc' }
+    });
+
+    // In a real app, we'd have an expectedReturnDate. Since we don't yet,
+    // we'll treat all active rentals as "Today's Tasks" to manage.
+    return { success: true, data: activeRentals };
+  } catch (error: any) {
+    console.error('getTodayTasksAction Error:', error);
+    return { success: false, error: error.message || 'Failed to fetch today\'s tasks' };
+  }
+}

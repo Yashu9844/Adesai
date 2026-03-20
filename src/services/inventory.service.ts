@@ -110,4 +110,36 @@ export const inventoryService = {
       data: { availableQuantity: newStock },
     });
   },
+
+  /**
+   * Get a high-level summary of the inventory and current rentals for the dashboard.
+   */
+  async getDashboardStats() {
+    const [totalTools, tools] = await Promise.all([
+      prisma.tool.count(),
+      prisma.tool.findMany({ select: { totalQuantity: true, availableQuantity: true } })
+    ]);
+
+    const totalQuantity = tools.reduce((acc, t) => acc + t.totalQuantity, 0);
+    const availableQuantity = tools.reduce((acc, t) => acc + t.availableQuantity, 0);
+    const rentedQuantity = totalQuantity - availableQuantity;
+
+    // Get today's returns (Rentals with status ACTIVE and expected returns today if we had a return date, or just returns processed today)
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    
+    const todayReturns = await prisma.rental.count({
+      where: {
+        status: 'RETURNED',
+        returnedAt: { gte: today }
+      }
+    });
+
+    return {
+      totalTools: totalQuantity,
+      availableTools: availableQuantity,
+      rentedTools: rentedQuantity,
+      todayReturns
+    };
+  },
 };

@@ -33,7 +33,7 @@ export function ToolCard({
     <div className="bg-white/50 backdrop-blur-[20px] shadow-[0_8px_30px_rgba(0,0,0,0.06)] border-[1.5px] border-white/80 rounded-[1.5rem] overflow-hidden shadow-[0_2px_12px_-4px_rgba(0,0,0,0.08)] border border-slate-200/50 flex flex-col group hover:border-violet-100 transition-all duration-300">
       
       {/* Top Banner section with soft color overlay logic if image is missing */}
-      <div className="relative h-32 w-full bg-gradient-to-tr from-slate-100 to-slate-50 flex items-center justify-center">
+      <div className="relative aspect-square w-full bg-gradient-to-tr from-slate-100 to-slate-50 flex items-center justify-center border-b border-slate-100">
         {imageUrl ? (
           <Image src={imageUrl} alt={name} fill className="object-cover" />
         ) : (

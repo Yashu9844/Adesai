@@ -45,3 +45,12 @@ export async function addToolAction(
     return { success: false, error: error.message || 'Failed to add tool' };
   }
 }
+export async function getDashboardStatsAction() {
+  try {
+    const stats = await inventoryService.getDashboardStats();
+    return { success: true, data: stats };
+  } catch (error: any) {
+    console.error('getDashboardStatsAction Error:', error);
+    return { success: false, error: error.message || 'Failed to fetch dashboard stats' };
+  }
+}

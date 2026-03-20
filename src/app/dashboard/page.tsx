@@ -1,53 +1,75 @@
+"use client";
+
 import { Header } from "@/components/ui/Header";
 import { StatCard } from "@/components/ui/StatCard";
 import { BottomNav } from "@/components/ui/BottomNav";
+import { Skeleton } from "@/components/ui/Skeleton";
 import { Package, Clock, RotateCcw, Box, ArrowRight, FileText } from "lucide-react";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import { getDashboardStatsAction } from "@/actions/tool.actions";
 
 export default function DashboardPage() {
-  // Placeholder Data
-  const stats = {
-    totalTools: 124,
-    availableTools: 86,
-    rentedTools: 38,
-    todayReturns: 5,
-  };
+  const [stats, setStats] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchStats() {
+      const res = await getDashboardStatsAction();
+      if (res.success) {
+        setStats(res.data);
+      }
+      setLoading(false);
+    }
+    fetchStats();
+  }, []);
 
   return (
     <div className="min-h-screen bg-transparent flex flex-col">
       <Header title="Tool Rental" subtitle="Welcome back, Admin" />
       
       {/* Scrollable Main Content Content */}
-      <main className="flex-1 overflow-y-auto px-4 py-6 space-y-6 pb-24">
+      <main className="flex-1 overflow-y-auto px-4 py-6 space-y-6 pb-24 no-scrollbar">
         
         {/* Statistics Grid */}
         <section>
           <h2 className="text-sm font-semibold text-slate-500 mb-3 px-1 uppercase tracking-wider">Overview</h2>
           <div className="grid grid-cols-2 gap-3">
-            <StatCard
-              title="Total Tools"
-              value={stats.totalTools}
-              icon={Box}
-              variant="default"
-            />
-            <StatCard
-              title="Available"
-              value={stats.availableTools}
-              icon={Package}
-              variant="success"
-            />
-            <StatCard
-              title="Rented Out"
-              value={stats.rentedTools}
-              icon={Clock}
-              variant="warning"
-            />
-            <StatCard
-              title="Returns Today"
-              value={stats.todayReturns}
-              icon={RotateCcw}
-              variant="default"
-            />
+            {loading ? (
+              <>
+                <Skeleton className="h-24 rounded-[1.25rem]" />
+                <Skeleton className="h-24 rounded-[1.25rem]" />
+                <Skeleton className="h-24 rounded-[1.25rem]" />
+                <Skeleton className="h-24 rounded-[1.25rem]" />
+              </>
+            ) : (
+              <>
+                <StatCard
+                  title="Total Tools"
+                  value={stats?.totalTools || 0}
+                  icon={Box}
+                  variant="default"
+                />
+                <StatCard
+                  title="Available"
+                  value={stats?.availableTools || 0}
+                  icon={Package}
+                  variant="success"
+                />
+                <StatCard
+                  title="Rented Out"
+                  value={stats?.rentedTools || 0}
+                  icon={Clock}
+                  variant="warning"
+                />
+                <StatCard
+                  title="Returns Today"
+                  value={stats?.todayReturns || 0}
+                  icon={RotateCcw}
+                  variant="default"
+                />
+              </>
+            )}
           </div>
         </section>
 
@@ -72,42 +94,46 @@ export default function DashboardPage() {
         <section>
           <h2 className="text-sm font-semibold text-slate-500 mb-3 px-1 uppercase tracking-wider">Quick Actions</h2>
           <div className="space-y-3">
-            <Link href="/inventory" className="flex items-center justify-between bg-white p-4 rounded-[1.25rem] shadow-[0_8px_30px_rgba(0,0,0,0.04)] border border-slate-200/50 hover:bg-slate-50 active:bg-slate-100 transition-colors">
+            <Link href="/inventory" className="flex items-center justify-between bg-white/60 backdrop-blur-xl p-4 rounded-[1.25rem] shadow-[0_8px_30px_rgba(0,0,0,0.04)] border border-white/80 hover:bg-white active:bg-slate-100 transition-colors">
               <div className="flex items-center gap-4">
-                <div className="p-2 bg-slate-100 rounded-[1rem]">
+                <div className="p-2 bg-slate-100/50 rounded-[1rem]">
                   <Package className="w-5 h-5 text-slate-600" />
                 </div>
                 <div className="text-left">
-                  <p className="font-semibold text-slate-900">Inventory</p>
+                  <p className="font-bold text-slate-900">Inventory</p>
                   <p className="text-xs text-slate-500">View and manage all tools</p>
                 </div>
               </div>
               <ArrowRight className="w-5 h-5 text-slate-400" />
             </Link>
 
-            <Link href="/rentals/active" className="flex items-center justify-between bg-white p-4 rounded-[1.25rem] shadow-[0_8px_30px_rgba(0,0,0,0.04)] border border-slate-200/50 hover:bg-slate-50 active:bg-slate-100 transition-colors">
+            <Link href="/rentals/active" className="flex items-center justify-between bg-white/60 backdrop-blur-xl p-4 rounded-[1.25rem] shadow-[0_8px_30px_rgba(0,0,0,0.04)] border border-white/80 hover:bg-white active:bg-slate-100 transition-colors">
               <div className="flex items-center gap-4">
-                <div className="p-2 bg-rose-50 rounded-[1rem]">
+                <div className="p-2 bg-rose-50/50 rounded-[1rem]">
                   <Clock className="w-5 h-5 text-rose-500" />
                 </div>
                 <div className="text-left">
-                  <p className="font-semibold text-slate-900">Active Rentals</p>
+                  <p className="font-bold text-slate-900">Active Rentals</p>
                   <p className="text-xs text-slate-500">Track returning tools</p>
                 </div>
               </div>
               <div className="flex items-center gap-2">
-                <span className="bg-rose-100 text-rose-700 text-xs font-semibold px-2 py-0.5 rounded-full">{stats.rentedTools}</span>
+                {loading ? (
+                  <Skeleton className="w-6 h-5 rounded-full" />
+                ) : (
+                  <span className="bg-rose-100 text-rose-700 text-xs font-bold px-2 py-0.5 rounded-full">{stats?.rentedTools || 0}</span>
+                )}
                 <ArrowRight className="w-5 h-5 text-slate-400" />
               </div>
             </Link>
             
-            <Link href="/history" className="flex items-center justify-between bg-white p-4 rounded-[1.25rem] shadow-[0_8px_30px_rgba(0,0,0,0.04)] border border-slate-200/50 hover:bg-slate-50 active:bg-slate-100 transition-colors">
+            <Link href="/history" className="flex items-center justify-between bg-white/60 backdrop-blur-xl p-4 rounded-[1.25rem] shadow-[0_8px_30px_rgba(0,0,0,0.04)] border border-white/80 hover:bg-white active:bg-slate-100 transition-colors">
               <div className="flex items-center gap-4">
-                <div className="p-2 bg-slate-100 rounded-[1rem]">
+                <div className="p-2 bg-slate-100/50 rounded-[1rem]">
                   <FileText className="w-5 h-5 text-slate-600" />
                 </div>
                 <div className="text-left">
-                  <p className="font-semibold text-slate-900">Rental History</p>
+                  <p className="font-bold text-slate-900">Rental History</p>
                   <p className="text-xs text-slate-500">Past transactions</p>
                 </div>
               </div>
@@ -121,3 +147,4 @@ export default function DashboardPage() {
     </div>
   );
 }
+

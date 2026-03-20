@@ -6,7 +6,8 @@ import { BottomNav } from "@/components/ui/BottomNav";
 import { SearchBar } from "@/components/ui/SearchBar";
 import { FilterTabs } from "@/components/ui/FilterTabs";
 import { HistoryCard } from "@/components/ui/HistoryCard";
-import { Search, Loader2 } from "lucide-react";
+import { Skeleton } from "@/components/ui/Skeleton";
+import { Search } from "lucide-react";
 import { getRentalHistoryAction } from "@/actions/rental.actions";
 
 const FILTER_OPTIONS = ["All Time", "Today", "This Week", "This Month"];
@@ -56,8 +57,6 @@ export default function HistoryPage() {
       record.mobileNumber.includes(q) ||
       record.toolName.toLowerCase().includes(q);
       
-    // Stub for advanced date filters via activeFilter
-    
     return matchesSearch;
   });
 
@@ -67,7 +66,7 @@ export default function HistoryPage() {
     <div className="min-h-screen bg-transparent flex flex-col">
       <Header title="Rental History" subtitle="View past rental transactions" showNotification={false} />
 
-      <main className="flex-1 overflow-y-auto pb-28 pt-4">
+      <main className="flex-1 overflow-y-auto pb-28 pt-4 no-scrollbar">
         
         {/* Sticky Filters & Search */}
         <div className="sticky top-0 z-30 bg-white/40 backdrop-blur-2xl border-b border-white/60 px-4 py-2 mb-2 flex flex-col gap-3">
@@ -85,14 +84,23 @@ export default function HistoryPage() {
 
         {/* Global Backend Overview Cards */}
         <div className="px-4 grid grid-cols-2 gap-3 mb-5 pt-2">
-          <div className="bg-white/60 backdrop-blur-md rounded-2xl p-4 border border-white/60 shadow-sm flex flex-col justify-center items-center">
-             <span className="text-[10px] font-bold text-slate-500 tracking-widest uppercase mb-1">Total Earned</span>
-             <span className="text-2xl font-extrabold text-violet-600">₹{overview.totalEarned}</span>
-          </div>
-          <div className="bg-white/60 backdrop-blur-md rounded-2xl p-4 border border-white/60 shadow-sm flex flex-col justify-center items-center">
-             <span className="text-[10px] font-bold text-slate-500 tracking-widest uppercase mb-1">Transactions</span>
-             <span className="text-2xl font-extrabold text-slate-800">{overview.transactions}</span>
-          </div>
+          {loading ? (
+            <>
+              <Skeleton className="h-20 rounded-2xl" />
+              <Skeleton className="h-20 rounded-2xl" />
+            </>
+          ) : (
+            <>
+              <div className="bg-white/60 backdrop-blur-md rounded-2xl p-4 border border-white/60 shadow-sm flex flex-col justify-center items-center">
+                 <span className="text-[10px] font-bold text-slate-500 tracking-widest uppercase mb-1">Total Earned</span>
+                 <span className="text-2xl font-extrabold text-violet-600">₹{overview.totalEarned}</span>
+              </div>
+              <div className="bg-white/60 backdrop-blur-md rounded-2xl p-4 border border-white/60 shadow-sm flex flex-col justify-center items-center">
+                 <span className="text-[10px] font-bold text-slate-500 tracking-widest uppercase mb-1">Transactions</span>
+                 <span className="text-2xl font-extrabold text-slate-800">{overview.transactions}</span>
+              </div>
+            </>
+          )}
         </div>
 
         {/* Local Summary Mini-Banner for Search */}
@@ -106,12 +114,14 @@ export default function HistoryPage() {
         )}
 
         {/* History List Grid */}
-        <div className="px-4 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+        <div className="px-4 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 pb-10">
           {loading ? (
-             <div className="col-span-full py-16 flex flex-col items-center justify-center text-center">
-                <Loader2 className="w-8 h-8 text-violet-600 animate-spin mb-4" />
-                <h3 className="text-slate-900 font-bold text-lg">Loading History...</h3>
-             </div>
+             <>
+               <Skeleton className="h-44 rounded-[1.5rem]" />
+               <Skeleton className="h-44 rounded-[1.5rem]" />
+               <Skeleton className="h-44 rounded-[1.5rem]" />
+               <Skeleton className="h-44 rounded-[1.5rem]" />
+             </>
           ) : filteredHistory.length > 0 ? (
             filteredHistory.map((record) => (
               <HistoryCard key={record.id} {...record} />

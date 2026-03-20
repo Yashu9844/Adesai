@@ -5,6 +5,7 @@ import { Header } from "@/components/ui/Header";
 import { BottomNav } from "@/components/ui/BottomNav";
 import { SearchBar } from "@/components/ui/SearchBar";
 import { ToolCard } from "@/components/ui/ToolCard";
+import { Skeleton } from "@/components/ui/Skeleton";
 import { Plus, Search, Loader2 } from "lucide-react";
 import { getToolsAction } from "@/actions/tool.actions";
 import Link from "next/link";
@@ -57,12 +58,16 @@ export default function InventoryPage() {
         </div>
 
         {/* Inventory Grid */}
-        <div className="px-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+        <div className="px-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 pb-10">
           {loading ? (
-            <div className="col-span-full py-16 flex flex-col items-center justify-center text-center">
-               <Loader2 className="w-8 h-8 text-violet-600 animate-spin mb-4" />
-               <h3 className="text-slate-900 font-bold text-lg">Loading Inventory...</h3>
-            </div>
+            <>
+              <Skeleton className="aspect-square w-full rounded-[1.5rem]" />
+              <Skeleton className="aspect-square w-full rounded-[1.5rem]" />
+              <Skeleton className="aspect-square w-full rounded-[1.5rem]" />
+              <Skeleton className="aspect-square w-full rounded-[1.5rem]" />
+              <Skeleton className="aspect-square w-full rounded-[1.5rem]" />
+              <Skeleton className="aspect-square w-full rounded-[1.5rem]" />
+            </>
           ) : filteredTools.length > 0 ? (
             filteredTools.map((tool) => (
               <ToolCard key={tool.id} {...tool} />

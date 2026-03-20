@@ -5,7 +5,8 @@ import { Header } from "@/components/ui/Header";
 import { BottomNav } from "@/components/ui/BottomNav";
 import { SearchBar } from "@/components/ui/SearchBar";
 import { RentalCard } from "@/components/ui/RentalCard";
-import { Clock, Loader2 } from "lucide-react";
+import { Skeleton } from "@/components/ui/Skeleton";
+import { Clock } from "lucide-react";
 import { getActiveRentalsAction } from "@/actions/rental.actions";
 import { useRouter } from "next/navigation";
 
@@ -19,7 +20,6 @@ export default function ActiveRentalsPage() {
     async function loadRentals() {
       const res = await getActiveRentalsAction();
       if (res.success && res.data) {
-        // Map backend Prisma model to the UI format expected by RentalCard
         const mappedData = res.data.map((r: any) => {
           const startDate = new Date(r.startDate);
           const daysRunning = Math.max(1, Math.ceil((new Date().getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)));
@@ -79,7 +79,7 @@ export default function ActiveRentalsPage() {
     <div className="min-h-screen bg-transparent flex flex-col">
       <Header title="Active Rentals" subtitle="Tools currently rented by customers" showNotification={false} />
 
-      <main className="flex-1 overflow-y-auto pb-28 pt-4">
+      <main className="flex-1 overflow-y-auto pb-28 pt-4 no-scrollbar">
         
         {/* Sticky Utility Bar with Search */}
         <div className="sticky top-0 z-30 bg-white/40 backdrop-blur-2xl border-b border-white/60 px-4 py-2 mb-4">
@@ -92,21 +92,26 @@ export default function ActiveRentalsPage() {
 
         {/* Info Banner */}
         <div className="px-4 mb-5">
-          <div className="bg-rose-50 border border-rose-100 p-3 rounded-[1.25rem] flex items-start gap-3 shadow-sm">
-            <Clock className="w-5 h-5 text-rose-500 shrink-0 mt-0.5" />
-            <p className="text-sm text-rose-800 font-medium">
-              You have <span className="font-bold">{activeRentals.length} active rentals</span> at the moment. Total estimated value: ₹{totalEstimatedValue}.
-            </p>
-          </div>
+          {loading ? (
+            <Skeleton className="h-14 w-full rounded-[1.25rem]" />
+          ) : (
+            <div className="bg-rose-50 border border-rose-100 p-3 rounded-[1.25rem] flex items-start gap-3 shadow-sm">
+              <Clock className="w-5 h-5 text-rose-500 shrink-0 mt-0.5" />
+              <p className="text-sm text-rose-800 font-medium">
+                You have <span className="font-bold">{activeRentals.length} active rentals</span> at the moment. Total estimated value: ₹{totalEstimatedValue}.
+              </p>
+            </div>
+          )}
         </div>
 
         {/* Rentals List Grid */}
-        <div className="px-4 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+        <div className="px-4 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5 pb-10">
           {loading ? (
-             <div className="col-span-full py-16 flex flex-col items-center justify-center text-center">
-               <Loader2 className="w-8 h-8 text-violet-600 animate-spin mb-4" />
-               <h3 className="text-slate-900 font-bold text-lg">Loading Rentals...</h3>
-             </div>
+             <>
+               <Skeleton className="h-64 rounded-[1.5rem]" />
+               <Skeleton className="h-64 rounded-[1.5rem]" />
+               <Skeleton className="h-64 rounded-[1.5rem]" />
+             </>
           ) : filteredRentals.length > 0 ? (
             filteredRentals.map((rental) => (
               <RentalCard 

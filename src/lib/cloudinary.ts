@@ -34,7 +34,7 @@ export const cloudinaryService = {
         folder,
         // Optional optimizations for mobile uploads
         transformation: [
-          { width: 1000, crop: 'limit' },
+          { width: 1000, height: 1000, crop: 'fill', gravity: 'auto' },
           { quality: 'auto' },
           { fetch_format: 'auto' },
         ],
