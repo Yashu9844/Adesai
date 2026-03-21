@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fdfdff" />
+      <stop offset="100%" stop-color="#eefbf8" />
+    </linearGradient>
+    <linearGradient id="cta" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#7c3aed" />
+      <stop offset="100%" stop-color="#d946ef" />
+    </linearGradient>
+  </defs>
+  <rect width="1280" height="720" fill="url(#bg)" />
+  <rect x="56" y="48" width="1168" height="624" rx="32" fill="#ffffff" stroke="#dbe4ea" />
+  <rect x="56" y="48" width="1168" height="84" rx="32" fill="#0f766e" />
+  <text x="108" y="99" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="700" fill="#ffffff">Sri Sai Baba Tool Rental</text>
+  <rect x="96" y="180" width="242" height="126" rx="24" fill="#f8fafc" stroke="#e2e8f0" />
+  <rect x="364" y="180" width="242" height="126" rx="24" fill="#ecfeff" stroke="#99f6e4" />
+  <rect x="632" y="180" width="242" height="126" rx="24" fill="#fff7ed" stroke="#fdba74" />
+  <rect x="900" y="180" width="242" height="126" rx="24" fill="#faf5ff" stroke="#d8b4fe" />
+  <text x="124" y="228" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="700" fill="#475569">Total Tools</text>
+  <text x="124" y="274" font-family="Arial, Helvetica, sans-serif" font-size="40" font-weight="700" fill="#0f172a">128</text>
+  <text x="392" y="228" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="700" fill="#0f766e">Available</text>
+  <text x="392" y="274" font-family="Arial, Helvetica, sans-serif" font-size="40" font-weight="700" fill="#134e4a">93</text>
+  <text x="660" y="228" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="700" fill="#c2410c">Rented Out</text>
+  <text x="660" y="274" font-family="Arial, Helvetica, sans-serif" font-size="40" font-weight="700" fill="#7c2d12">35</text>
+  <text x="928" y="228" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="700" fill="#7c3aed">Returns Today</text>
+  <text x="928" y="274" font-family="Arial, Helvetica, sans-serif" font-size="40" font-weight="700" fill="#581c87">7</text>
+  <rect x="96" y="350" width="520" height="248" rx="28" fill="#ffffff" stroke="#e2e8f0" />
+  <text x="128" y="396" font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="700" fill="#0f172a">Quick Actions</text>
+  <rect x="128" y="428" width="456" height="56" rx="18" fill="#f8fafc" stroke="#e2e8f0" />
+  <rect x="128" y="500" width="456" height="56" rx="18" fill="#f8fafc" stroke="#e2e8f0" />
+  <rect x="664" y="350" width="478" height="248" rx="28" fill="#f8fafc" stroke="#e2e8f0" />
+  <text x="696" y="396" font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="700" fill="#0f172a">New Rental</text>
+  <rect x="696" y="448" width="414" height="76" rx="24" fill="url(#cta)" />
+  <text x="903" y="494" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="700" fill="#ffffff">Go to Give Tool</text>
+</svg>

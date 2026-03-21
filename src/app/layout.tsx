@@ -1,12 +1,30 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import { PWARegistrar } from "@/components/pwa/PWARegistrar";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Tool Rental App",
-  description: "Manage tool inventory and rentals",
+  title: "Sri Sai Baba Tool Rental",
+  description: "Manage tool inventory, rentals, and returns from any device.",
+  applicationName: "Sri Sai Baba Tool Rental",
+  manifest: "/manifest.webmanifest",
+  icons: {
+    icon: [
+      { url: "/icon-192.png", sizes: "192x192", type: "image/png" },
+      { url: "/icon-512.png", sizes: "512x512", type: "image/png" },
+    ],
+    apple: "/apple-touch-icon.png",
+  },
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "Tool Rental",
+  },
+  formatDetection: {
+    telephone: false,
+  },
 };
 
 export default function RootLayout({
@@ -17,6 +35,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="antialiased">
       <body className={`${inter.className} text-slate-900 relative min-h-screen selection:bg-fuchsia-200 selection:text-fuchsia-900`}>
+        <PWARegistrar />
         
         {/* Premium Ambient Glassmorphism Mesh Background */}
         <div className="fixed inset-0 z-[-1] overflow-hidden pointer-events-none bg-[#fdfdff]">

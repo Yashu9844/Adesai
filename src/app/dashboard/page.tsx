@@ -7,18 +7,34 @@ import { Skeleton } from "@/components/ui/Skeleton";
 import { Package, Clock, RotateCcw, Box, ArrowRight, FileText } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { getDashboardStatsAction } from "@/actions/tool.actions";
+
+type DashboardStats = {
+  totalTools: number;
+  availableTools: number;
+  rentedTools: number;
+  todayReturns: number;
+};
 
 export default function DashboardPage() {
-  const [stats, setStats] = useState<any>(null);
+  const [stats, setStats] = useState<DashboardStats | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchStats() {
-      const res = await getDashboardStatsAction();
-      if (res.success) {
-        setStats(res.data);
+      try {
+        const response = await fetch("/api/dashboard/stats", {
+          method: "GET",
+          cache: "no-store",
+        });
+
+        const res = await response.json();
+        if (res.success) {
+          setStats(res.data);
+        }
+      } catch (error) {
+        console.error("Failed to fetch dashboard stats:", error);
       }
+
       setLoading(false);
     }
     fetchStats();
