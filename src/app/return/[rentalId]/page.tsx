@@ -42,7 +42,7 @@ export default function ReturnToolPage({ params }: { params: Promise<{ rentalId:
 
   if (loading) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-transparent">
+      <div className="min-h-[100dvh] flex flex-col items-center justify-center bg-transparent">
         <Loader2 className="w-10 h-10 text-violet-600 animate-spin mb-4" />
         <h2 className="text-xl font-bold text-slate-800">Loading Return Details...</h2>
       </div>
@@ -51,7 +51,7 @@ export default function ReturnToolPage({ params }: { params: Promise<{ rentalId:
 
   if (!rental) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-transparent text-center p-6">
+      <div className="min-h-[100dvh] flex flex-col items-center justify-center bg-transparent text-center p-6">
         <AlertCircle className="w-12 h-12 text-rose-500 mb-4" />
         <h2 className="text-xl font-bold text-slate-800 mb-2">Rental Not Found</h2>
         <button onClick={() => router.back()} className="px-5 py-2.5 bg-slate-100 text-slate-700 font-bold rounded-full">Go Back</button>
@@ -76,7 +76,7 @@ export default function ReturnToolPage({ params }: { params: Promise<{ rentalId:
   const combinedDailyPrice = rental.rentalItems.reduce((acc: number, item: any) => acc + (item.quantity * item.dailyPriceSnapshot), 0);
 
   return (
-    <div className="min-h-screen bg-transparent flex flex-col">
+    <div className="min-h-[100dvh] bg-transparent flex flex-col">
       <Header 
         title="Return Tool" 
         subtitle="Complete rental and final payment" 
@@ -149,7 +149,7 @@ export default function ReturnToolPage({ params }: { params: Promise<{ rentalId:
       </main>
 
       {/* Fixed Bottom Action Bar */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 p-4 pb-safe shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-50">
+      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 p-4 pb-[calc(1rem+env(safe-area-inset-bottom))] shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-50">
         <div className="max-w-md mx-auto flex gap-3">
           <button 
             onClick={() => router.back()}

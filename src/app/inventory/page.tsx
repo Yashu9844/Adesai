@@ -34,7 +34,7 @@ export default function InventoryPage() {
   );
 
   return (
-    <div className="min-h-screen bg-transparent flex flex-col">
+    <div className="min-h-[100dvh] bg-transparent flex flex-col">
       <Header title="Inventory" subtitle="Manage and track all available tools" />
 
       {/* Main Content Area */}

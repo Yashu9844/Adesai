@@ -28,7 +28,7 @@ export default function RentalDetailsPage({ params }: { params: Promise<{ rental
 
   if (loading) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-transparent">
+      <div className="min-h-[100dvh] flex flex-col items-center justify-center bg-transparent">
         <Loader2 className="w-10 h-10 text-violet-600 animate-spin mb-4" />
         <h2 className="text-xl font-bold text-slate-800">Loading Details...</h2>
       </div>
@@ -37,7 +37,7 @@ export default function RentalDetailsPage({ params }: { params: Promise<{ rental
 
   if (!rental) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-transparent text-center p-6">
+      <div className="min-h-[100dvh] flex flex-col items-center justify-center bg-transparent text-center p-6">
         <AlertCircle className="w-12 h-12 text-rose-500 mb-4" />
         <h2 className="text-xl font-bold text-slate-800 mb-2">Rental Not Found</h2>
         <button onClick={() => router.back()} className="px-5 py-2.5 bg-slate-100 text-slate-700 font-bold rounded-full">Go Back</button>
@@ -54,7 +54,7 @@ export default function RentalDetailsPage({ params }: { params: Promise<{ rental
   const balance = Math.max(0, currentCost - totalAdvance);
 
   return (
-    <div className="min-h-screen bg-transparent flex flex-col relative overflow-hidden">
+    <div className="min-h-[100dvh] bg-transparent flex flex-col relative overflow-hidden">
       
       {/* Immersive Background Effects */}
       <div className="fixed inset-0 z-[-1] pointer-events-none">
@@ -191,7 +191,7 @@ export default function RentalDetailsPage({ params }: { params: Promise<{ rental
 
       {/* Conditional Fixed Bottom Action Bar */}
       {rental.status === "ACTIVE" && (
-        <div className="fixed bottom-0 left-0 right-0 bg-white/80 backdrop-blur-2xl border-t border-slate-200 p-4 pb-safe shadow-[0_-10px_30px_rgba(0,0,0,0.05)] z-50">
+        <div className="fixed bottom-0 left-0 right-0 bg-white/80 backdrop-blur-2xl border-t border-slate-200 p-4 pb-[calc(1rem+env(safe-area-inset-bottom))] shadow-[0_-10px_30px_rgba(0,0,0,0.05)] z-50">
             <div className="max-w-md mx-auto flex gap-3">
             <button 
                 onClick={() => router.push(`/return/${rental.id}`)}

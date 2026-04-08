@@ -38,7 +38,7 @@ export function BottomNav() {
   const pathname = usePathname(); 
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 bg-teal-600/95 backdrop-blur-2xl border-t border-teal-400/30 pb-safe z-50 rounded-t-[2.5rem] shadow-[0_-12px_40px_-12px_rgba(13,148,136,0.5)]">
+    <nav className="fixed bottom-0 left-0 right-0 bg-teal-600/95 backdrop-blur-2xl border-t border-teal-400/30 pb-[env(safe-area-inset-bottom)] z-50 rounded-t-[2.5rem] shadow-[0_-12px_40px_-12px_rgba(13,148,136,0.5)]">
       <div className="flex items-center justify-around px-2 max-w-md mx-auto h-[76px] relative">
         
         <NavItem 

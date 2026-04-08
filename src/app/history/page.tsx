@@ -63,7 +63,7 @@ export default function HistoryPage() {
   const totalEarned = filteredHistory.reduce((sum, record) => sum + record.totalAmountPaid, 0);
 
   return (
-    <div className="min-h-screen bg-transparent flex flex-col">
+    <div className="min-h-[100dvh] bg-transparent flex flex-col">
       <Header title="Rental History" subtitle="View past rental transactions" showNotification={false} />
 
       <main className="flex-1 overflow-y-auto pb-28 pt-4 no-scrollbar">

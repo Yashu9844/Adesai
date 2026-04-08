@@ -1,9 +1,18 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { PWARegistrar } from "@/components/pwa/PWARegistrar";
 
 const inter = Inter({ subsets: ["latin"] });
+
+export const viewport: Viewport = {
+  themeColor: "#0d9488",
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  viewportFit: "cover",
+};
 
 export const metadata: Metadata = {
   title: "Sri Sai Baba Tool Rental",
@@ -34,7 +43,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="antialiased">
-      <body className={`${inter.className} text-slate-900 relative min-h-screen selection:bg-fuchsia-200 selection:text-fuchsia-900`}>
+      <body className={`${inter.className} text-slate-900 relative min-h-[100dvh] pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)] selection:bg-fuchsia-200 selection:text-fuchsia-900`}>
         <PWARegistrar />
         
         {/* Premium Ambient Glassmorphism Mesh Background */}

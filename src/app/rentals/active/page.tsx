@@ -76,7 +76,7 @@ export default function ActiveRentalsPage() {
   const totalEstimatedValue = activeRentals.reduce((sum, r) => sum + r.estimatedCost, 0);
 
   return (
-    <div className="min-h-screen bg-transparent flex flex-col">
+    <div className="min-h-[100dvh] bg-transparent flex flex-col">
       <Header title="Active Rentals" subtitle="Tools currently rented by customers" showNotification={false} />
 
       <main className="flex-1 overflow-y-auto pb-28 pt-4 no-scrollbar">

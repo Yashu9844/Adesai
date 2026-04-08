@@ -33,7 +33,7 @@ export default function SplashScreen() {
   }, [router]);
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen relative overflow-hidden">
+    <div className="flex flex-col items-center justify-center min-h-[100dvh] relative overflow-hidden">
       {/* Central Brand Icon with generic spinning pulse */}
       <div className="relative mb-8">
         <div className="absolute inset-0 bg-violet-500/20 rounded-full blur-xl animate-pulse" />

@@ -94,7 +94,7 @@ export default function PremiumRentPage() {
   if (!mounted) return null;
 
   return (
-    <div className="min-h-screen bg-transparent flex flex-col relative overflow-hidden text-slate-800 pb-32">
+    <div className="min-h-[100dvh] bg-transparent flex flex-col relative overflow-hidden text-slate-800 pb-32">
       
       {/* Immersive Background Effects specific to this flow */}
       <div className="fixed inset-0 z-[-1] pointer-events-none">

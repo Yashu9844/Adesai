@@ -42,7 +42,7 @@ export function Header({ title, showNotification = true, onBack }: HeaderProps) 
 
   return (
     <>
-      <header className="sticky top-0 z-40 w-full bg-teal-600/95 backdrop-blur-2xl px-6 flex flex-col justify-center transition-all duration-300 h-[76px] rounded-b-[2.5rem] shadow-[0_12px_40px_-12px_rgba(13,148,136,0.5)] border-b border-teal-400/30">
+      <header className="sticky top-0 z-40 w-full bg-teal-600/95 backdrop-blur-2xl px-6 flex flex-col justify-center transition-all duration-300 min-h-[76px] pb-4 pt-[calc(1rem+env(safe-area-inset-top))] rounded-b-[2.5rem] shadow-[0_12px_40px_-12px_rgba(13,148,136,0.5)] border-b border-teal-400/30">
         <div className="flex items-center justify-between w-full">
           <div className="flex items-center gap-3">
             {!isHome && (

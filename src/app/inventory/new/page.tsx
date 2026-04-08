@@ -58,7 +58,7 @@ export default function AddToolPage() {
   };
 
   return (
-    <div className="min-h-screen bg-transparent flex flex-col relative overflow-hidden">
+    <div className="min-h-[100dvh] bg-transparent flex flex-col relative overflow-hidden">
       
       {/* Background Decor */}
       <div className="fixed inset-0 z-[-1] pointer-events-none">
@@ -122,7 +122,7 @@ export default function AddToolPage() {
         </form>
       </main>
 
-      <div className="fixed bottom-0 left-0 right-0 p-4 pb-safe bg-white/80 backdrop-blur-xl border-t border-slate-200 z-50 shadow-[0_-10px_30px_rgba(0,0,0,0.05)]">
+      <div className="fixed bottom-0 left-0 right-0 p-4 pb-[calc(1rem+env(safe-area-inset-bottom))] bg-white/80 backdrop-blur-xl border-t border-slate-200 z-50 shadow-[0_-10px_30px_rgba(0,0,0,0.05)]">
         <button 
           onClick={handleSubmit} 
           disabled={loading || !formData.name.trim()}

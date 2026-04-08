@@ -41,7 +41,7 @@ export default function DashboardPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-transparent flex flex-col">
+    <div className="min-h-[100dvh] bg-transparent flex flex-col">
       <Header title="Tool Rental" subtitle="Welcome back, Admin" />
       
       {/* Scrollable Main Content Content */}

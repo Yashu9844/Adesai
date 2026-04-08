@@ -32,7 +32,7 @@ export default function CreateRentalPage() {
   const today = new Date().toISOString().split('T')[0];
 
   return (
-    <div className="min-h-screen bg-transparent flex flex-col">
+    <div className="min-h-[100dvh] bg-transparent flex flex-col">
       <Header title="Give Tool" subtitle="Create a new rental entry" showNotification={false} />
 
       <main className="flex-1 overflow-y-auto px-4 py-6 pb-32">
@@ -151,7 +151,7 @@ export default function CreateRentalPage() {
       </main>
 
       {/* Fixed Bottom Action Bar */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 p-4 pb-safe shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-50">
+      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 p-4 pb-[calc(1rem+env(safe-area-inset-bottom))] shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-50">
         <div className="max-w-md mx-auto flex gap-3">
           <Link 
             href="/dashboard"
