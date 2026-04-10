@@ -7,6 +7,7 @@ import { FormInput } from "@/components/ui/FormInput";
 import { PhotoUpload } from "@/components/ui/PhotoUpload";
 import { Wrench, Loader2 } from "lucide-react";
 import { addToolAction } from "@/actions/tool.actions";
+import { compressImage } from "@/lib/utils";
 
 export default function AddToolPage() {
   const router = useRouter();
@@ -27,12 +28,14 @@ export default function AddToolPage() {
     }));
   };
 
-  const handlePhotoSelect = (file: File) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => {
-      setPhotoBase64(reader.result as string);
-    };
+  const handlePhotoSelect = async (file: File) => {
+    try {
+      const compressedBase64 = await compressImage(file, 800, 800, 0.7);
+      setPhotoBase64(compressedBase64);
+    } catch (error) {
+      console.error("Error compressing tool image:", error);
+      alert("Failed to process image. Please try again.");
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {

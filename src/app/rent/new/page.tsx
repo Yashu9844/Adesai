@@ -6,7 +6,7 @@ import {
   Package, User, Calendar, IndianRupee, 
   ArrowRight, Phone, MapPin, Search, ChevronLeft, Check, Camera, Loader2, Upload
 } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn, compressImage } from "@/lib/utils";
 import { getToolsAction } from "@/actions/tool.actions";
 import { createRentalAction } from "@/actions/rental.actions";
 
@@ -50,14 +50,16 @@ export default function PremiumRentPage() {
     if (step < 3) setStep(step + 1);
   };
 
-  const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handlePhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setCustomerPhoto(reader.result as string);
-      };
-      reader.readAsDataURL(file);
+      try {
+        const compressedBase64 = await compressImage(file, 800, 800, 0.7);
+        setCustomerPhoto(compressedBase64);
+      } catch (error) {
+        console.error("Error compressing image:", error);
+        alert("Failed to process image. Please try again.");
+      }
     }
   };
 
