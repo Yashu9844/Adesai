@@ -44,7 +44,7 @@ export const inventoryService = {
         await tx.toolItem.createMany({ data: toolItems });
       }
       return tool;
-    });
+    }, { maxWait: 15000, timeout: 30000 });
   },
 
   /**
@@ -79,7 +79,7 @@ export const inventoryService = {
           availableQuantity: newAvailable,
         },
       });
-    });
+    }, { maxWait: 15000, timeout: 30000 });
   },
 
   /**

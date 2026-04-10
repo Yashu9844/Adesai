@@ -160,6 +160,9 @@ export const rentalService = {
       });
 
       return rental;
+    }, {
+      maxWait: 15000,  // Increase max wait time to 15 seconds for serverless cold starts
+      timeout: 30000,  // Increase timeout to 30 seconds for the multiple queries
     });
   },
 };

@@ -135,6 +135,9 @@ export const billingService = {
         advancePaid: totalAdvancePaid,
         balancePaid: finalBalanceToPay,
       };
+    }, {
+      maxWait: 15000,
+      timeout: 30000,
     });
   },
 };
