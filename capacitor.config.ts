@@ -5,7 +5,7 @@ const serverUrl = process.env.CAPACITOR_SERVER_URL;
 
 const config: CapacitorConfig = {
   appId: "com.srisaibaba.toolrental",
-  appName: "Sri Sai Baba Tool Rental",
+  appName: "Srisaibaba Hardware",
   webDir: "www",
   android: {
     allowMixedContent: false,

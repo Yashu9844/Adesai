@@ -42,7 +42,7 @@ export default function DashboardPage() {
 
   return (
     <div className="min-h-[100dvh] bg-transparent flex flex-col">
-      <Header title="Tool Rental" subtitle="Welcome back, Admin" />
+      <Header title="Srisaibaba Hardware" subtitle="Welcome back, Admin" />
       
       {/* Scrollable Main Content Content */}
       <main className="flex-1 overflow-y-auto px-4 py-6 space-y-6 pb-24 no-scrollbar">

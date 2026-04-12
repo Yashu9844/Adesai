@@ -3,8 +3,8 @@ import type { MetadataRoute } from "next";
 export default function manifest(): MetadataRoute.Manifest {
   return {
     id: "/",
-    name: "Sri Sai Baba Tool Rental",
-    short_name: "Tool Rental",
+    name: "Srisaibaba Hardware",
+    short_name: "Srisaibaba",
     description: "Tool rental management app for inventory, rentals, returns, and history.",
     start_url: "/",
     scope: "/",

@@ -99,7 +99,7 @@ export default function LoginPage() {
           <div className="mt-10 pt-8 border-t border-white/5 w-full">
             <p className="text-[10px] text-slate-600 font-bold uppercase tracking-widest leading-loose">
               © 2026 Admin Management System <br />
-              Sri Sai Baba Tool Rentals
+              Srisaibaba Hardware
             </p>
           </div>
         </div>

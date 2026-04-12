@@ -15,9 +15,9 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "Sri Sai Baba Tool Rental",
+  title: "Srisaibaba Hardware",
   description: "Manage tool inventory, rentals, and returns from any device.",
-  applicationName: "Sri Sai Baba Tool Rental",
+  applicationName: "Srisaibaba Hardware",
   manifest: "/manifest.webmanifest",
   icons: {
     icon: [
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
-    title: "Tool Rental",
+    title: "Srisaibaba Hardware",
   },
   formatDetection: {
     telephone: false,
