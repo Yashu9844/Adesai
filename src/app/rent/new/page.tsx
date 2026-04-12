@@ -10,6 +10,8 @@ import { cn, compressImage } from "@/lib/utils";
 import { getToolsAction } from "@/actions/tool.actions";
 import { createRentalAction } from "@/actions/rental.actions";
 
+import { PageLoader } from "@/components/ui/PageLoader";
+
 export default function PremiumRentPage() {
   const router = useRouter();
   const [step, setStep] = useState(1);
@@ -93,7 +95,7 @@ export default function PremiumRentPage() {
     }
   };
 
-  if (!mounted) return null;
+  if (!mounted) return <PageLoader text="Configuring Builder..." />;
 
   return (
     <div className="min-h-[100dvh] bg-transparent flex flex-col relative overflow-hidden text-slate-800 pb-32">
@@ -359,7 +361,7 @@ export default function PremiumRentPage() {
           ) : step === 3 ? (
             "Confirm Rental"
           ) : (
-            <>"Continue" <ArrowRight className="w-5 h-5 ml-1" /></>
+            <>Continue <ArrowRight className="w-5 h-5 ml-1" /></>
           )} 
         </button>
       </div>

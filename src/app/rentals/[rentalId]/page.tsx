@@ -8,6 +8,8 @@ import { useRouter } from "next/navigation";
 import { getRentalByIdAction } from "@/actions/rental.actions";
 import { cn } from "@/lib/utils";
 
+import { PageLoader } from "@/components/ui/PageLoader";
+
 export default function RentalDetailsPage({ params }: { params: Promise<{ rentalId: string }> }) {
   const router = useRouter();
   const resolvedParams = use(params);
@@ -27,12 +29,7 @@ export default function RentalDetailsPage({ params }: { params: Promise<{ rental
   }, [resolvedParams.rentalId]);
 
   if (loading) {
-    return (
-      <div className="min-h-[100dvh] flex flex-col items-center justify-center bg-transparent">
-        <Loader2 className="w-10 h-10 text-violet-600 animate-spin mb-4" />
-        <h2 className="text-xl font-bold text-slate-800">Loading Details...</h2>
-      </div>
-    );
+    return <PageLoader text="Loading Details..." />;
   }
 
   if (!rental) {
