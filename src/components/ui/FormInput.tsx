@@ -23,7 +23,7 @@ export const FormInput = React.forwardRef<HTMLInputElement, FormInputProps>(
           <input
             type={type}
             className={cn(
-              "flex w-full rounded-[1.25rem] border border-slate-200 bg-white px-4 py-3.5 text-sm transition-all shadow-[0_2px_8px_-2px_rgba(0,0,0,0.04)]",
+              "flex w-full rounded-[1.25rem] border border-slate-200 bg-white px-4 py-3.5 text-slate-900 font-medium text-sm transition-all shadow-[0_2px_8px_-2px_rgba(0,0,0,0.04)]",
               "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-600 focus-visible:border-transparent",
               "placeholder:text-slate-400 disabled:cursor-not-allowed disabled:bg-slate-50 disabled:text-slate-500",
               icon && "pl-11", // Add padding if icon exists

@@ -14,7 +14,7 @@ export function SearchBar({ placeholder = "Search...", value, onChange }: Search
       </div>
       <input
         type="text"
-        className="block w-full pl-10 pr-3 py-3 border border-slate-200 rounded-[1.25rem] leading-5 bg-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-violet-500 sm:text-sm transition-all shadow-[0_2px_8px_-2px_rgba(0,0,0,0.04)]"
+        className="block w-full pl-10 pr-3 py-3 text-slate-900 font-medium border border-slate-200 rounded-[1.25rem] leading-5 bg-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-violet-500 sm:text-sm transition-all shadow-[0_2px_8px_-2px_rgba(0,0,0,0.04)]"
         placeholder={placeholder}
         value={value}
         onChange={(e) => onChange && onChange(e.target.value)}
