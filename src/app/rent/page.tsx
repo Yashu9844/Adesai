@@ -16,12 +16,12 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 
-// Mock Tool Data for the selector
+// Mock Tool Data for the selector (Note: Real data should come from DB in production)
 const TOOLS = [
-  { id: "1", name: "Jali (Iron Mesh)", price: 20 },
-  { id: "2", name: "Support Stand", price: 15 },
-  { id: "3", name: "Dimsa (Compactor)", price: 150 },
-  { id: "4", name: "Concrete Mixer", price: 500 },
+  { id: "1", name: "Iron Mesh (Jali - Heavy)", price: 20 },
+  { id: "2", name: "Support Stand (Adjustable)", price: 15 },
+  { id: "3", name: "Compactor (Dimsa 5HP)", price: 150 },
+  { id: "4", name: "Concrete Mixer (1/2 Bag)", price: 500 },
 ];
 
 export default function CreateRentalPage() {

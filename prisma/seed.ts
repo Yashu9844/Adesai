@@ -7,24 +7,20 @@ async function main() {
   // Delete in reverse order of dependencies
   await prisma.activityLog.deleteMany();
   await prisma.payment.deleteMany();
+  await prisma.rentalItemDetail.deleteMany();
   await prisma.rentalItem.deleteMany();
   await prisma.rental.deleteMany();
   await prisma.customer.deleteMany();
+  await prisma.toolItem.deleteMany();
   await prisma.tool.deleteMany();
 
   console.log('Seeding the database with initial tools...');
 
   const toolsData = [
-    { name: 'Iron Mesh (Jali - Heavy)', totalQuantity: 50, availableQuantity: 50, dailyPrice: 20.0, imageUrl: 'https://placeholder.com/jali' },
-    { name: 'Support Stand (Adjustable)', totalQuantity: 100, availableQuantity: 100, dailyPrice: 15.0, imageUrl: 'https://placeholder.com/stand' },
-    { name: 'Compactor (Dimsa 5HP)', totalQuantity: 5, availableQuantity: 5, dailyPrice: 150.0, imageUrl: 'https://placeholder.com/dimsa' },
-    { name: 'Concrete Mixer (1/2 Bag)', totalQuantity: 2, availableQuantity: 2, dailyPrice: 500.0, imageUrl: 'https://placeholder.com/mixer' },
-    { name: 'Scaffolding Pipe (10ft)', totalQuantity: 200, availableQuantity: 200, dailyPrice: 10.0, imageUrl: 'https://placeholder.com/pipe' },
-    { name: 'Vibrator Machine with Needle', totalQuantity: 10, availableQuantity: 10, dailyPrice: 200.0, imageUrl: 'https://placeholder.com/vibrator' },
-    { name: 'Hammer Drill (Heavy Duty)', totalQuantity: 8, availableQuantity: 8, dailyPrice: 300.0, imageUrl: 'https://placeholder.com/drill' },
-    { name: 'Wheelbarrow', totalQuantity: 20, availableQuantity: 20, dailyPrice: 50.0, imageUrl: 'https://placeholder.com/wheelbarrow' },
-    { name: 'Angle Grinder', totalQuantity: 15, availableQuantity: 15, dailyPrice: 100.0, imageUrl: 'https://placeholder.com/grinder' },
-    { name: 'Welding Machine', totalQuantity: 4, availableQuantity: 4, dailyPrice: 400.0, imageUrl: 'https://placeholder.com/welding' },
+    { name: 'Iron Mesh (Jali - Heavy)', totalQuantity: 6, availableQuantity: 6, dailyPrice: 20.0, imageUrl: '/images/jali-mesh.png' },
+    { name: 'Support Stand (Adjustable)', totalQuantity: 6, availableQuantity: 6, dailyPrice: 15.0, imageUrl: '/images/metal-stand.png' },
+    { name: 'Compactor (Dimsa 5HP)', totalQuantity: 6, availableQuantity: 6, dailyPrice: 150.0, imageUrl: '/images/dimsa.jpg' },
+    { name: 'Concrete Mixer (1/2 Bag)', totalQuantity: 6, availableQuantity: 6, dailyPrice: 500.0, imageUrl: '/images/concrete-mixer.jpg' },
   ];
 
   const tools = [];
