@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { loginAction } from "@/actions/auth.actions";
 import { useRouter } from "next/navigation";
 import { Lock, Eye, EyeOff, Loader2, ShieldCheck } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -19,12 +18,13 @@ export default function LoginPage() {
     setError("");
 
     try {
-      const res = await loginAction(password);
-      if (res.success) {
+      const adminPassword = process.env.NEXT_PUBLIC_LOCAL_ADMIN_PASSWORD || "admin123";
+      if (password === adminPassword) {
+        window.localStorage.setItem("admin-session", "authenticated");
         router.push("/dashboard");
         router.refresh();
       } else {
-        setError(res.error || "Invalid password");
+        setError("Invalid password");
       }
     } catch (err) {
       setError("An unexpected error occurred");

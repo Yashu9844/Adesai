@@ -7,6 +7,7 @@ import { Skeleton } from "@/components/ui/Skeleton";
 import { Package, Clock, RotateCcw, Box, ArrowRight, FileText } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { localData } from "@/lib/local-data";
 
 type DashboardStats = {
   totalTools: number;
@@ -22,13 +23,8 @@ export default function DashboardPage() {
   useEffect(() => {
     async function fetchStats() {
       try {
-        const response = await fetch("/api/dashboard/stats", {
-          method: "GET",
-          cache: "no-store",
-        });
-
-        const res = await response.json();
-        if (res.success) {
+        const res = await localData.getDashboardStats();
+        if (res.success && res.data) {
           setStats(res.data);
         }
       } catch (error) {

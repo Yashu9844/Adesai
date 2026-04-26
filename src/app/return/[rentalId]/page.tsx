@@ -6,7 +6,7 @@ import { ProfileCard } from "@/components/ui/ProfileCard";
 import { BillingSummary } from "@/components/ui/BillingSummary";
 import { Package, Calendar, Clock, AlertCircle, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { getRentalByIdAction, completeRentalAction } from "@/actions/rental.actions";
+import { localData } from "@/lib/local-data";
 
 import { PageLoader } from "@/components/ui/PageLoader";
 
@@ -20,7 +20,7 @@ export default function ReturnToolPage({ params }: { params: Promise<{ rentalId:
 
   useEffect(() => {
     async function fetchRental() {
-      const res = await getRentalByIdAction(resolvedParams.rentalId);
+      const res = await localData.getRentalById(resolvedParams.rentalId);
       if (res.success && res.data) {
         setRental(res.data);
       }
@@ -32,7 +32,7 @@ export default function ReturnToolPage({ params }: { params: Promise<{ rentalId:
   const handleReturn = async () => {
     if (!rental) return;
     setProcessing(true);
-    const res = await completeRentalAction(rental.id);
+    const res = await localData.completeRental(rental.id);
     setProcessing(false);
 
     if (res.success) {

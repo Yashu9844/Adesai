@@ -6,8 +6,8 @@ import { Header } from "@/components/ui/Header";
 import { FormInput } from "@/components/ui/FormInput";
 import { PhotoUpload } from "@/components/ui/PhotoUpload";
 import { Wrench, Loader2 } from "lucide-react";
-import { addToolAction } from "@/actions/tool.actions";
 import { compressImage } from "@/lib/utils";
+import { localData } from "@/lib/local-data";
 
 export default function AddToolPage() {
   const router = useRouter();
@@ -44,7 +44,7 @@ export default function AddToolPage() {
 
     setLoading(true);
 
-    const res = await addToolAction({
+    const res = await localData.addTool({
       name: formData.name,
       totalQuantity: parseInt(formData.totalQuantity, 10),
       dailyPrice: parseInt(formData.dailyPrice, 10),
