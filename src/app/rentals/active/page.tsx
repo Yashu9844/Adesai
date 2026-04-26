@@ -7,8 +7,8 @@ import { SearchBar } from "@/components/ui/SearchBar";
 import { RentalCard } from "@/components/ui/RentalCard";
 import { Skeleton } from "@/components/ui/Skeleton";
 import { Clock } from "lucide-react";
-import { getActiveRentalsAction } from "@/actions/rental.actions";
 import { useRouter } from "next/navigation";
+import { localData } from "@/lib/local-data";
 
 export default function ActiveRentalsPage() {
   const router = useRouter();
@@ -18,7 +18,7 @@ export default function ActiveRentalsPage() {
 
   useEffect(() => {
     async function loadRentals() {
-      const res = await getActiveRentalsAction();
+      const res = await localData.getActiveRentals();
       if (res.success && res.data) {
         const mappedData = res.data.map((r: any) => {
           const startDate = new Date(r.startDate);

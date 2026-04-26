@@ -8,7 +8,7 @@ import { FilterTabs } from "@/components/ui/FilterTabs";
 import { HistoryCard } from "@/components/ui/HistoryCard";
 import { Skeleton } from "@/components/ui/Skeleton";
 import { Search } from "lucide-react";
-import { getRentalHistoryAction } from "@/actions/rental.actions";
+import { localData } from "@/lib/local-data";
 
 const FILTER_OPTIONS = ["All Time", "Today", "This Week", "This Month"];
 
@@ -23,7 +23,7 @@ export default function HistoryPage() {
   useEffect(() => {
     async function fetchHistory() {
       setLoading(true);
-      const res = await getRentalHistoryAction(activeFilter);
+      const res = await localData.getRentalHistory(activeFilter);
       if (res.success && res.data) {
         setOverview(res.summary || { transactions: 0, totalEarned: 0 });
         const mappedData = res.data.map((r: any) => {

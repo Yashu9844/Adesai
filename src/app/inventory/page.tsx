@@ -7,8 +7,8 @@ import { SearchBar } from "@/components/ui/SearchBar";
 import { ToolCard } from "@/components/ui/ToolCard";
 import { Skeleton } from "@/components/ui/Skeleton";
 import { Plus, Search, Loader2 } from "lucide-react";
-import { getToolsAction } from "@/actions/tool.actions";
 import Link from "next/link";
+import { localData } from "@/lib/local-data";
 
 export default function InventoryPage() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -17,7 +17,7 @@ export default function InventoryPage() {
 
   useEffect(() => {
     async function fetchTools() {
-      const res = await getToolsAction();
+      const res = await localData.getTools();
       if (res.success && res.data) {
         setTools(res.data.map((t: any) => ({
           ...t,

@@ -5,8 +5,8 @@ import { Header } from "@/components/ui/Header";
 import { ProfileCard } from "@/components/ui/ProfileCard";
 import { Package, Calendar, Clock, AlertCircle, Loader2, IndianRupee, MapPin, Phone, Hash } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { getRentalByIdAction } from "@/actions/rental.actions";
 import { cn } from "@/lib/utils";
+import { localData } from "@/lib/local-data";
 
 import { PageLoader } from "@/components/ui/PageLoader";
 
@@ -19,7 +19,7 @@ export default function RentalDetailsPage({ params }: { params: Promise<{ rental
 
   useEffect(() => {
     async function fetchRental() {
-      const res = await getRentalByIdAction(resolvedParams.rentalId);
+      const res = await localData.getRentalById(resolvedParams.rentalId);
       if (res.success && res.data) {
         setRental(res.data);
       }

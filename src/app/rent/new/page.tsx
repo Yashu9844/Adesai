@@ -7,8 +7,7 @@ import {
   ArrowRight, Phone, MapPin, Search, ChevronLeft, Check, Camera, Loader2, Upload
 } from "lucide-react";
 import { cn, compressImage } from "@/lib/utils";
-import { getToolsAction } from "@/actions/tool.actions";
-import { createRentalAction } from "@/actions/rental.actions";
+import { localData } from "@/lib/local-data";
 
 import { PageLoader } from "@/components/ui/PageLoader";
 
@@ -38,7 +37,7 @@ export default function PremiumRentPage() {
 
   useEffect(() => {
     async function init() {
-      const res = await getToolsAction();
+      const res = await localData.getTools();
       if (res.success && res.data) {
         // Only show tools that have available quantity
         setTools(res.data.filter((t: any) => t.availableQuantity > 0));
@@ -70,7 +69,7 @@ export default function PremiumRentPage() {
     const tool = tools.find(t => t.id === selectedTool);
     if (!tool) return;
 
-    const res = await createRentalAction({
+    const res = await localData.createRental({
       expectedDays: 1, // Defaulting to 1 day expected
       advanceAmount: 0,
       customer: {
